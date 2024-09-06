@@ -18,6 +18,12 @@ const WebcamCapture = () => {
 
     const targetIndices = ['0', '2', '5', '7', '8', '11', '12', '13', '14', '15', '16', '23', '24', '25', '26'];
     let cosineScore = 0;
+    let leftCosineScore = 0;
+    let rightCosineScore = 0;
+
+    const [wholeBodyScore, setWholeBodyScore] = useState(0);
+    const [leftBodyScore, setLeftBodyScore] = useState(0);
+    const [rightBodyScore, setRightBodyScore] = useState(0);
 
     //arms_down_average
     // 포즈 데이터들만 따로 가지고 있는 파일 하나 만들어야 할 듯
@@ -84,17 +90,34 @@ const WebcamCapture = () => {
                 if (poses && poses.length > 0) {
                     const pose = poses[0]; // 인식되는 포즈중 첫번째만 출력 , 포즈가 두개이면 경고창이 나오게 하면 될듯
                     const userPose = convertStructure(pose.keypoints);
-                    const userPoseVector = vectorizeAndNormalize(userPose);
-                    const targetPoseVector = vectorizeAndNormalize(targetPose);
+                    const leftBody = "left";
+                    const rightBody = "right";
+                    const allBody = "all";
+
+                    const leftUserPoseVector = vectorizeAndNormalize(userPose, leftBody);
+                    const leftTargetPoseVector = vectorizeAndNormalize(targetPose, leftBody);
+                    leftCosineScore = 1 - cosineDistanceMatching(leftUserPoseVector, leftTargetPoseVector);
+
+                    const rightUserPoseVector = vectorizeAndNormalize(userPose, rightBody);
+                    const rightTargetPoseVector = vectorizeAndNormalize(targetPose, rightBody);
+                    rightCosineScore = 1 - cosineDistanceMatching(rightUserPoseVector, rightTargetPoseVector);
+
+                    const userPoseVector = vectorizeAndNormalize(userPose, allBody);
+                    const targetPoseVector = vectorizeAndNormalize(targetPose, allBody);
                     cosineScore = 1 - cosineDistanceMatching(userPoseVector,targetPoseVector);
                     drawCanvas(pose, video, video.videoWidth, video.videoHeight, canvasRef);
+
                     // 캡쳐 조건 추가
-                    if (cosineScore >= 0.9){
-                        if (!captured){
-                            setCaptured(true);
-                            captureAndSendImage();
-                        }
-                    }
+                    setWholeBodyScore(cosineScore);
+                    setLeftBodyScore(leftCosineScore);
+                    setRightBodyScore(rightCosineScore);
+
+                    // if (cosineScore >= 0.9){
+                    //     if (!captured){
+                    //         setCaptured(true);
+                    //         captureAndSendImage();
+                    //     }
+                    // }
                 }
             }
         };
@@ -134,6 +157,15 @@ const WebcamCapture = () => {
         clothImageRef.current = clothImage;  // clothImage 상태가 변경될 때마다 ref 업데이트
     }, [clothImage]);
 
+    useEffect(() => {
+        if (wholeBodyScore >= 0.9) {
+            if (!captured) {
+                setCaptured(true);
+                captureAndSendImage();
+            }
+        }
+    }, [wholeBodyScore, captured]);
+
     //TODO userID 구현
     const userID = 'jinsoo9123'
 
@@ -147,6 +179,15 @@ const WebcamCapture = () => {
 
         alert('Start Tryon!')
         const canvas = canvasRef.current;
+
+        // 아무것도 안 그려진것을 보내기 위한 코드
+        const ctx = canvas.getContext('2d');
+        // 캔버스 클리어 (이전에 그려진 모든 요소 삭제)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 비디오 프레임을 캔버스에 그립니다.
+        ctx.drawImage(webcamRef.current, 0, 0, canvas.width, canvas.height);
+
         const vtonImage = canvas.toDataURL('image/png');  // 이미지 데이터 URL 생성
 
         // 이미지 전송을 위해 Data URL을 Blob으로 변환
@@ -186,7 +227,7 @@ const WebcamCapture = () => {
     };
 
     return (
-        <div>
+        <div align={'center'}>
             <input type="file" accept="image/*" onChange={handleClothImageChange} />
             <video
                 ref={webcamRef}
@@ -197,11 +238,44 @@ const WebcamCapture = () => {
                 width="640"
                 height="480"
             />
-            <canvas ref={canvasRef} style={{ width: '768px', height: '1024px' }} />
+            <div id="scoreOverlay" style={{position: 'relative', width: '768px', height: '1024px'}}>
+                <canvas ref={canvasRef} style={{width: '768px', height: '1024px'}}/>
+                {/* 점수를 표시하는 요소 */}
+                <div id="totalScore" style={{
+                    position: 'absolute',
+                    top: '10px',
+                    left: '10px',
+                    color: 'white',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    padding: '5px',
+                    borderRadius: '5px'
+                }}>Total Score: {wholeBodyScore.toFixed(2)}
+                </div>
+                <div id="leftScore" style={{
+                    position: 'absolute',
+                    top: '40px',
+                    left: '10px',
+                    color: 'white',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    padding: '5px',
+                    borderRadius: '5px'
+                }}>Left Score: {leftBodyScore.toFixed(2)}
+                </div>
+                <div id="rightScore" style={{
+                    position: 'absolute',
+                    top: '70px',
+                    left: '10px',
+                    color: 'white',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    padding: '5px',
+                    borderRadius: '5px'
+                }}>Right Score: {rightBodyScore.toFixed(2)}
+                </div>
+            </div>
             {resultImage && (
                 <div>
                     <h2>Result Image</h2>
-                    <img src={resultImage} alt="Virtual Try-On Result" />
+                    <img src={resultImage} alt="Virtual Try-On Result"/>
                 </div>
             )}
         </div>
