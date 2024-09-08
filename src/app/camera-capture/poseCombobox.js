@@ -34,9 +34,8 @@ const frameworks = [
     },
 ]
 
-export default function PoseCombobox() {
+export default function PoseCombobox({value, setValue}) {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
