@@ -13,9 +13,9 @@ export function convertStructure(keypoints){
 
 //동작을 벡터 형태로 전환한다. 변환된 벡터를 평행 이동하고 정규화한다.
 //정규화란 벡터의 크기를 일정하게 만드는 것이다. 벡터가 같은 크기를 가지게 되어 유사도 비교가 가능하다.
-export function vectorizeAndNormalize(keypoints) {
+export function vectorizeAndNormalize(keypoints, option) {
     //convertPoseToVectors를 호출하여 동작을 벡터 형태로 변환한다.
-    let [vectorPoseXY, vectorPoseTransform] = convertPoseToVectors(keypoints);
+    let [vectorPoseXY, vectorPoseTransform] = convertPoseToVectors(keypoints, option);
 
     //scaleAndTranslate를 호출하여 벡터의 크기를 조정한다.
     vectorPoseXY = scaleAndTranslate(vectorPoseXY, vectorPoseTransform);
@@ -28,7 +28,7 @@ export function vectorizeAndNormalize(keypoints) {
 }
 
 //주어진 포즈를 벡터로 변환하는 함수
-function convertPoseToVectors(keypoints) {
+function convertPoseToVectors(keypoints, option) {
     let vectorPoseXY = [];
 
     //x,y 좌표를 원점으로 이동시키기 위한 변수 선언
@@ -38,13 +38,19 @@ function convertPoseToVectors(keypoints) {
     //키포인트들의 위치를 정규화하기 위한 변수 선언
     let scaler = Number.NEGATIVE_INFINITY;
 
-
-    const bodyParts = [
-        "nose", "left_eye", "right_eye", "left_ear", "right_ear",
-        "left_shoulder", "right_shoulder", "left_elbow", "right_elbow",
-        "left_wrist", "right_wrist", "left_hip", "right_hip",
-        "left_knee", "right_knee"
-    ]
+    let bodyParts = []
+    if (option === "all"){
+        bodyParts = [
+            "nose", "left_eye", "right_eye", "left_ear", "right_ear",
+            "left_shoulder", "right_shoulder", "left_elbow", "right_elbow",
+            "left_wrist", "right_wrist", "left_hip", "right_hip",
+            "left_knee", "right_knee"
+        ]
+    } else if (option === "left"){
+        bodyParts = ["left_shoulder", "left_elbow", "left_wrist","left_hip","left_knee"]
+    } else if (option === "right"){
+        bodyParts = ["right_shoulder", "right_elbow", "right_wrist","right_hip","right_knee"]
+    }
 
     //모든 키포인트의 x, y 좌표값을 vectorPoseXY에 저장한다.
     bodyParts.forEach(bodyPoint => {
