@@ -31,7 +31,7 @@ const WebcamCapture = () => {
 
     //arms_down_average
     // 포즈 데이터들만 따로 가지고 있는 파일 하나 만들어야 할 듯
-    const targetPose = {
+    const armsDownPose = {
         nose: { x: 383.14868960588115, y: 166.57613904839698 },
         right_shoulder: { x: 248.3069796284956, y: 350.9076214737701 },
         right_elbow: { x: 209.32135619718306, y: 595.7821501530924 },
@@ -102,6 +102,17 @@ const WebcamCapture = () => {
                     const rightBody = "right";
                     const allBody = "all";
 
+                    // 선택된 포즈에 따라 코사인 점수에서 쓰이는 포즈도 바뀌도록 코드 수정
+                    let targetPose = armsDownPose;
+
+                    if (selectPose === "armsDown"){
+                        targetPose = armsDownPose;
+                    } else if(selectPose === "leftArm"){
+                        targetPose = leftArmUpPose;
+                    } else if(selectPose === "rightArm"){
+                        targetPose = rightArmUpPose;
+                    }
+
                     const leftUserPoseVector = vectorizeAndNormalize(userPose, leftBody);
                     const leftTargetPoseVector = vectorizeAndNormalize(targetPose, leftBody);
                     leftCosineScore = 1 - cosineDistanceMatching(leftUserPoseVector, leftTargetPoseVector);
@@ -139,7 +150,7 @@ const WebcamCapture = () => {
         let selectedPose = null;
 
         if (pose === "armsDown"){
-            selectedPose = targetPose;
+            selectedPose = armsDownPose;
         } else if(pose === "leftArm"){
             selectedPose = leftArmUpPose;
         } else if(pose === "rightArm"){
