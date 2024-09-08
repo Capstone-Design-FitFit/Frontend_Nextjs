@@ -146,11 +146,9 @@ const WebcamCapture = () => {
             selectedPose = rightArmUpPose;
         }
 
-        console.log(pose,selectedPose)
-
         if (selectedPose) {
-            Object.keys(pose).forEach(bodyKey => {
-                const keypoint = pose[bodyKey]
+            Object.keys(selectedPose).forEach(bodyKey => {
+                const keypoint = selectedPose[bodyKey]
                 if (keypoint) {
                     const { x, y } = keypoint;
                     ctx.beginPath();
