@@ -5,25 +5,25 @@ export default function Footer() {
             <div><a className="flex items-center gap-2 text-black dark:text-white md:pt-1" href="/">
                 <div
                     className="flex flex-none items-center justify-center border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-black h-[30px] w-[30px] rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" aria-label="Acme Store logo" viewBox="0 0 32 28"
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-label="Acme Store logo" viewBox="0 0 32 32"
                          className="h-4 w-4 fill-black dark:fill-white h-[10px] w-[10px]">
-                        <path d="M21.5758 9.75769L16 0L0 28H11.6255L21.5758 9.75769Z"></path>
+                        <path d="M4 0H28V4H8V12H24V16H8V28H4V0Z"></path>
                         <path d="M26.2381 17.9167L20.7382 28H32L26.2381 17.9167Z"></path>
                     </svg>
                 </div>
-                <span className="uppercase">Acme Store</span></a></div>
+                <span className="uppercase">FITFIT</span></a></div>
             <nav>
                 <ul>
                     <li><a
                         className="block p-2 text-lg underline-offset-4 hover:text-black hover:underline dark:hover:text-neutral-300 md:inline-block md:text-sm"
-                        href="/shipping-returns">Shipping &amp; Returns</a></li>
+                        href="/about-us">About Us</a></li>
                     <li><a
                         className="block p-2 text-lg underline-offset-4 hover:text-black hover:underline dark:hover:text-neutral-300 md:inline-block md:text-sm"
-                        href="/contact-us">Contact Us</a></li>
+                        href="/contact-us">Contact Information</a></li>
                 </ul>
             </nav>
             <div className="md:ml-auto"><a aria-label="Github Repository"
-                                           href="https://github.com/bigcommerce/nextjs-commerce">
+                                           href="https://github.com/Capstone-Design-FitFit">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                      shape-rendering="geometricPrecision" className="h-6">
                     <path
