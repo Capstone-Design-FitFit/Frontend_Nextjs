@@ -196,19 +196,34 @@ const WebcamCapture = () => {
 
         // If a pose is selected, draw the pose guide on the canvas
         if (selectedPose) {
-            drawPose(ctx, selectedPose);
+            drawPose(ctx, selectedPose, 768,1024);
         }
     };
 
     // Helper function to draw a pose skeleton
-    const drawPose = (ctx, pose) => {
+    const drawPose = (ctx, pose, canvasWidth, canvasHeight) => {
         const keypoints = Object.keys(pose);
+
+        // Get the min and max values of the pose keypoints to normalize them
+        const minX = Math.min(...keypoints.map(k => pose[k].x));
+        const maxX = Math.max(...keypoints.map(k => pose[k].x));
+        const minY = Math.min(...keypoints.map(k => pose[k].y));
+        const maxY = Math.max(...keypoints.map(k => pose[k].y));
+
+        // Calculate scale to fit the canvas size
+        const scaleX = canvasWidth / (maxX - minX);
+        const scaleY = canvasHeight / (maxY - minY);
+        const scale = Math.min(scaleX, scaleY); // Keep aspect ratio
+
+        // Calculate offsets to center the pose
+        const offsetX = (canvasWidth - (maxX - minX) * scale) / 2 - minX * scale;
+        const offsetY = (canvasHeight - (maxY - minY) * scale) / 2 - minY * scale;
 
         // Draw lines between keypoints to form a skeleton
         const drawLine = (start, end) => {
             ctx.beginPath();
-            ctx.moveTo(pose[start].x, pose[start].y);
-            ctx.lineTo(pose[end].x, pose[end].y);
+            ctx.moveTo(pose[start].x * scale + offsetX, pose[start].y * scale + offsetY);
+            ctx.lineTo(pose[end].x * scale + offsetX, pose[end].y * scale + offsetY);
             ctx.lineWidth = 2;
             ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)'; // Blue lines with transparency
             ctx.stroke();
@@ -233,7 +248,8 @@ const WebcamCapture = () => {
         keypoints.forEach(bodyKey => {
             const keypoint = pose[bodyKey];
             if (keypoint) {
-                const { x, y } = keypoint;
+                const x = keypoint.x * scale + offsetX;
+                const y = keypoint.y * scale + offsetY;
                 ctx.beginPath();
                 ctx.arc(x, y, 5, 0, 2 * Math.PI);
                 ctx.fillStyle = 'rgba(255, 0, 0, 0.8)'; // Red color for keypoints with some transparency
