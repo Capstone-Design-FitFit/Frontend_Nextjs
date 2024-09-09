@@ -139,40 +139,107 @@ const WebcamCapture = () => {
         return () => clearInterval(interval);
     }, [detector, selectPose]);
 
+    // const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+    //     const ctx = canvas.current.getContext('2d');
+    //     canvas.current.width = videoWidth;
+    //     canvas.current.height = videoHeight;
+    //
+    //     ctx.clearRect(0, 0, videoWidth, videoHeight);
+    //     ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+    //
+    //     let selectedPose = null;
+    //
+    //     if (pose === "armsDown"){
+    //         selectedPose = armsDownPose;
+    //     } else if(pose === "leftArm"){
+    //         selectedPose = leftArmUpPose;
+    //     } else if(pose === "rightArm"){
+    //         selectedPose = rightArmUpPose;
+    //     }
+    //
+    //     if (selectedPose) {
+    //         Object.keys(selectedPose).forEach(bodyKey => {
+    //             const keypoint = selectedPose[bodyKey]
+    //             if (keypoint) {
+    //                 const { x, y } = keypoint;
+    //                 ctx.beginPath();
+    //                 ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    //                 if (cosineScore > 0.9){
+    //                     ctx.fillStyle = 'green';
+    //                 } else {
+    //                     ctx.fillStyle = 'red';
+    //                 }
+    //                 ctx.fill();
+    //             }
+    //         });
+    //     }
+    // };
+
     const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
         const ctx = canvas.current.getContext('2d');
         canvas.current.width = videoWidth;
         canvas.current.height = videoHeight;
 
+        // Draw the video frame onto the canvas
         ctx.clearRect(0, 0, videoWidth, videoHeight);
         ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
 
+        // Select the target pose based on the input
         let selectedPose = null;
-
-        if (pose === "armsDown"){
+        if (pose === "armsDown") {
             selectedPose = armsDownPose;
-        } else if(pose === "leftArm"){
+        } else if (pose === "leftArm") {
             selectedPose = leftArmUpPose;
-        } else if(pose === "rightArm"){
+        } else if (pose === "rightArm") {
             selectedPose = rightArmUpPose;
         }
 
+        // If a pose is selected, draw the pose guide on the canvas
         if (selectedPose) {
-            Object.keys(selectedPose).forEach(bodyKey => {
-                const keypoint = selectedPose[bodyKey]
-                if (keypoint) {
-                    const { x, y } = keypoint;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                    if (cosineScore > 0.9){
-                        ctx.fillStyle = 'green';
-                    } else {
-                        ctx.fillStyle = 'red';
-                    }
-                    ctx.fill();
-                }
-            });
+            drawPose(ctx, selectedPose);
         }
+    };
+
+    // Helper function to draw a pose skeleton
+    const drawPose = (ctx, pose) => {
+        const keypoints = Object.keys(pose);
+
+        // Draw lines between keypoints to form a skeleton
+        const drawLine = (start, end) => {
+            ctx.beginPath();
+            ctx.moveTo(pose[start].x, pose[start].y);
+            ctx.lineTo(pose[end].x, pose[end].y);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)'; // Blue lines with transparency
+            ctx.stroke();
+        };
+
+        // Define pairs of keypoints to draw lines between (e.g., shoulders to elbows)
+        const pairs = [
+            ['nose', 'left_eye'], ['nose', 'right_eye'], ['left_eye', 'left_ear'], ['right_eye', 'right_ear'],
+            ['left_shoulder', 'right_shoulder'], ['left_shoulder', 'left_elbow'], ['left_elbow', 'left_wrist'],
+            ['right_shoulder', 'right_elbow'], ['right_elbow', 'right_wrist'], ['left_shoulder', 'left_hip'],
+            ['right_shoulder', 'right_hip'], ['left_hip', 'right_hip'], ['left_hip', 'left_knee'],
+            ['left_knee', 'left_ankle'], ['right_hip', 'right_knee'], ['right_knee', 'right_ankle']
+        ];
+
+        pairs.forEach(pair => {
+            if (pose[pair[0]] && pose[pair[1]]) {
+                drawLine(pair[0], pair[1]);
+            }
+        });
+
+        // Draw each keypoint as a small circle
+        keypoints.forEach(bodyKey => {
+            const keypoint = pose[bodyKey];
+            if (keypoint) {
+                const { x, y } = keypoint;
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.8)'; // Red color for keypoints with some transparency
+                ctx.fill();
+            }
+        });
     };
 
     useEffect(() => {
