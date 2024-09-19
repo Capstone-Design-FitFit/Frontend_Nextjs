@@ -2,11 +2,16 @@ import ProductBox from "@/components/productBox";
 import Image from "next/image";
 
 export default function Home() {
-  return (
+    const product = {
+        name : 't-shirt',
+        displayName : 't-shirt',
+        imageUrl : '/images/t-shirt.jpg'
+    };
+
+    return (
       <>
           <section className="mx-auto grid max-w-screen-2xl gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2">
-              <div className="md:col-span-4 md:row-span-2"><a className="relative block aspect-square h-full w-full"
-                                                              href="/matte-black-magic-mug">
+              <div className="md:col-span-4 md:row-span-2"><a className="relative block aspect-square h-full w-full" href="/matte-black-magic-mug">
                   <div
                       className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
                       <img alt="Lightweight Jacket" fetchPriority="high" decoding="async" data-nimg="fill"
@@ -86,12 +91,13 @@ export default function Home() {
           </section>
           <div className=" w-full overflow-x-auto pb-6 pt-1">
               <ul className="flex snap-center gap-4">
-                  <ProductBox></ProductBox>
-                  <ProductBox></ProductBox>
-                  <ProductBox></ProductBox>
-                  <ProductBox></ProductBox>
-                  <ProductBox></ProductBox>
-                  <ProductBox></ProductBox>
+                  <ProductBox product={product}></ProductBox>
+                  <ProductBox product={product}></ProductBox>
+                  <ProductBox product={product}></ProductBox>
+                  <ProductBox product={product}></ProductBox>
+                  <ProductBox product={product}></ProductBox>
+                  <ProductBox product={product}></ProductBox>
+                  <ProductBox product={product}></ProductBox>
               </ul>
           </div>
       </>
