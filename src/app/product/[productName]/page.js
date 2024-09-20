@@ -1,10 +1,21 @@
 'use client'
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation'
 import { Skeleton } from "@/components/ui/skeleton"
+import Image from 'next/image'
+
+// 예제 제품 데이터
+const productData = [
+    { id: 'pants', displayName: 'Stylish Pants', imageUrl: '/images/pants.jpg', price: '$20.00' },
+    { id: 'shirt', displayName: 'Cool Shirt', imageUrl: '/images/shirt.jpg', price: '$15.00' },
+    // 다른 제품 데이터...
+];
 
 const ProductPage = ({ product }) => {
     const router = useRouter();
+    const pathname = usePathname();
+    const productName = pathname.split('/')[2];
+    const imageURL = `/images/${productName}.jpg`
 
     if (router.isFallback){
         return <Skeleton className="w-[100px] h-[20px] rounded-full" />;
@@ -15,21 +26,23 @@ const ProductPage = ({ product }) => {
             <div
                 className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 dark:border-neutral-800 dark:bg-black md:p-12 lg:flex-row lg:gap-8">
                 <div className="h-full w-full basis-full lg:basis-4/6">
-                    <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden"><img alt=""
-                                                                                                             fetchPriority="high"
-                                                                                                             decoding="async"
-                                                                                                             data-nimg="fill"
-                                                                                                             className="h-full w-full object-contain"
-                                                                                                             sizes="(min-width: 1024px) 66vw, 100vw"
-                                                                                                             srcSet="/_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=3840&amp;q=75 3840w"
-                                                                                                             src="/_next/image?url=https%3A%2F%2Fcdn11.bigcommerce.com%2Fs-89nvgelf3p%2Fimages%2Fstencil%2F1080w%2Fproducts%2F126%2F409%2FMen-Jacket-Front-Black__15466__96550.1684861378.png&amp;w=3840&amp;q=75"
-                                                                                                             style={{
-                                                                                                                 position: 'absolute',
-                                                                                                                 height: '100%',
-                                                                                                                 width: '100%',
-                                                                                                                 inset: '0px',
-                                                                                                                 color: 'transparent',
-                                                                                                             }}/>
+                    <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden">
+                        <img
+                            alt={productName}
+                            src={imageURL}
+                            fetchPriority="high"
+                            decoding="async"
+                            data-nimg="fill"
+                            className="h-full w-full object-contain"
+                            sizes="(min-width: 1024px) 66vw, 100vw"
+                            style={{
+                                position: 'absolute',
+                                height: '100%',
+                                width: '100%',
+                                inset: '0px',
+                                color: 'transparent',
+                            }}
+                        />
                         <div className="absolute bottom-[15%] flex w-full justify-center">
                             <div
                                 className="mx-auto flex h-11 items-center rounded-full border border-white bg-neutral-50/80 text-neutral-500 backdrop-blur dark:border-black dark:bg-neutral-900/80">
@@ -123,51 +136,15 @@ const ProductPage = ({ product }) => {
                         <div className="mr-auto w-auto rounded-full bg-blue-600 p-2 text-sm text-white"><p>$249.99<span
                             className="ml-1 inline">USD</span></p></div>
                     </div>
-                    <dl className="mb-8">
-                        <dt className="mb-4 text-sm uppercase tracking-wide">Color</dt>
-                        <dd className="flex flex-wrap gap-3">
-                            <button aria-disabled="false" title="Color Black"
-                                    className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900 ring-1 ring-transparent transition duration-300 ease-in-out hover:scale-110 hover:ring-blue-600 ">Black
-                            </button>
-                            <button aria-disabled="false" title="Color White"
-                                    className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900 ring-1 ring-transparent transition duration-300 ease-in-out hover:scale-110 hover:ring-blue-600 ">White
-                            </button>
-                        </dd>
-                    </dl>
-                    <dl className="mb-8">
-                        <dt className="mb-4 text-sm uppercase tracking-wide">Size</dt>
-                        <dd className="flex flex-wrap gap-3">
-                            <button aria-disabled="false" title="Size S"
-                                    className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900 ring-1 ring-transparent transition duration-300 ease-in-out hover:scale-110 hover:ring-blue-600 ">S
-                            </button>
-                            <button aria-disabled="false" title="Size M"
-                                    className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900 ring-1 ring-transparent transition duration-300 ease-in-out hover:scale-110 hover:ring-blue-600 ">M
-                            </button>
-                            <button aria-disabled="false" title="Size L"
-                                    className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900 ring-1 ring-transparent transition duration-300 ease-in-out hover:scale-110 hover:ring-blue-600 ">L
-                            </button>
-                        </dd>
-                    </dl>
                     <div
                         className="prose mx-auto max-w-6xl text-base leading-7 text-black prose-headings:mt-8 prose-headings:font-semibold prose-headings:tracking-wide prose-headings:text-black prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-3xl prose-h4:text-2xl prose-h5:text-xl prose-h6:text-lg prose-a:text-black prose-a:underline hover:prose-a:text-neutral-300 prose-strong:text-black prose-ol:mt-8 prose-ol:list-decimal prose-ol:pl-6 prose-ul:mt-8 prose-ul:list-disc prose-ul:pl-6 dark:text-white dark:prose-headings:text-white dark:prose-a:text-white dark:prose-strong:text-white mb-6 text-sm leading-tight dark:text-white/[60%]">
                         <p>Add a little zing to your winter wardrobe with this vibrant Winter-breaker Jacket. With a
                             brushed fleece inside, and a relaxed unisex fit, this jacket is just the stuff of the
                             dreams, so be quick to grab yourself one!<br/><br/><span>Long sleeve ripstop jacket colorblocked in black. Rough pattern in obsidian black and brown printed throughout. Printed graphic in white throughout. Logo-woven webbing trim in white and black throughout. Bungee-style drawstring at hood featuring rubberized logo hardware. Zip closure at front. Rubberized logo appliqué at chest. Welt pockets and textile logo patch in orange at waist. Elasticized cuffs. Partially lined. Black hardware.</span>
                         </p></div>
-                    <form
-                        action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')">
-                        <button aria-label="Please select an option" aria-disabled="true"
-                                className="relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white cursor-not-allowed opacity-60 hover:opacity-60">
-                            <div className="absolute left-0 ml-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true" className="h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 4.5v15m7.5-7.5h-15"></path>
-                                </svg>
-                            </div>
-                            Start Try On!
-                        </button>
-                        <p aria-live="polite" className="sr-only" role="status"></p></form>
+                    <button className="relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:bg-blue-500">
+                        Start Try On!
+                    </button>
                 </div>
             </div>
             <div className="py-8"><h2 className="mb-4 text-2xl font-bold">Related Products</h2>
