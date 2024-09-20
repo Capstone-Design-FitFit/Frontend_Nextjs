@@ -1,3 +1,5 @@
+'use client'
+
 import ProductBox from "@/components/productBox";
 import Image from "next/image";
 
@@ -5,7 +7,8 @@ export default function Home() {
     const product = {
         name : 't-shirt',
         displayName : 't-shirt',
-        imageUrl : '/images/t-shirt.jpg'
+        imageUrl : '/images/t-shirt.jpg',
+        price : '36,000',
     };
 
     return (
@@ -89,7 +92,7 @@ export default function Home() {
                   </div>
               </a></div>
           </section>
-          <div className=" w-full overflow-x-auto pb-6 pt-1">
+          <div className="w-full overflow-x-auto pb-6 pt-1">
               <ul className="flex snap-center gap-4">
                   <ProductBox product={product}></ProductBox>
                   <ProductBox product={product}></ProductBox>
