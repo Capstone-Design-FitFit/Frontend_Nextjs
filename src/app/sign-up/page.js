@@ -20,12 +20,93 @@ export default function SignUpForm() {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [verifyCode, setVerifyCode] = useState("");
+    const [isVerifying, setIsVerifying] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Form submission logic goes here
-        console.log("Form submitted with:", { firstName, lastName, email, password });
-    };
+    const test = async () => {
+        const bodyData = {
+            ClientId: process.env.NEXT_PUBLIC_CLIENT_ID,
+            Username: email,
+            Password: password,
+            UserAttributes: [
+                {
+                    Name: "name",
+                    Value: firstName + " " + lastName
+                },
+                {
+                    Name: "email",
+                    Value: email
+                }
+            ]
+        };
+
+        if (firstName.length === 0 || lastName.length === 0 || email.length === 0 || password.length === 0) {
+            alert("정보 미입력")
+            return
+        }
+
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_COGNITO_API_URL, {
+                method: "POST",
+                headers : {
+                    "Content-Type": "application/x-amz-json-1.1",
+                    "X-Amz-Target" : "AWSCognitoIdentityProviderService.SignUp",
+                },
+                body: JSON.stringify(bodyData),
+            });
+
+            const data = await response.json();
+            console.log(data)
+            if (response.ok) {
+                alert("인증코드가 이메일로 전송!");
+                setIsVerifying(true);
+            } else {
+                alert("백엔드 오류");
+            }
+        } catch (error) {
+            alert("Error SignUp", error);
+        }
+    }
+
+    const test2 = async () => {
+        const bodyData2 = {
+            ClientId: process.env.NEXT_PUBLIC_CLIENT_ID,
+            Username: email,
+            ConfirmationCode : verifyCode,
+        };
+
+        if (!isVerifying) {
+            alert("First get a Verification Code");
+            return;
+        }
+
+        if (verifyCode.length === 0) {
+            alert("No Verification Code");
+            return;
+        }
+
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_COGNITO_API_URL, {
+                method: "POST",
+                headers : {
+                    "Content-Type": "application/x-amz-json-1.1",
+                    "X-Amz-Target" : "AWSCognitoIdentityProviderService.ConfirmSignUp",
+                },
+                body: JSON.stringify(bodyData2),
+            });
+
+            const data = await response.json();
+            console.log(data)
+            if (data === {}) {
+                alert("로그인 완료");
+            } else {
+                alert("백엔드 오류");
+            }
+        } catch (error) {
+            console.log(data);
+            alert("Error SignUp", error);
+        }
+    }
 
     return (
         <Card className="mx-auto max-w-sm">
@@ -36,7 +117,7 @@ export default function SignUpForm() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="grid gap-4">
+                <form className="grid gap-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="first-name">First name</Label>
@@ -80,12 +161,23 @@ export default function SignUpForm() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <Button type="submit" className="w-full">
+                    <div className="grid gap-2">
+                        <Label htmlFor="password">Verification Code</Label>
+                        <Input
+                            id="verification-code"
+                            type="verification_code"
+                            required
+                            value={verifyCode}
+                            onChange={(e) => setVerifyCode(e.target.value)}
+                        />
+                    </div>
+                    <Button variant="outline" className="w-full" onClick={test}>
+                        Send Code
+                    </Button>
+                    <Button type="submit" className="w-full" onClick={test2}>
                         Create an account
                     </Button>
-                    <Button variant="outline" className="w-full" onClick={() => {/* GitHub Sign-Up Logic */}}>
-                        Sign up with GitHub
-                    </Button>
+
                 </form>
                 <div className="mt-4 text-center text-sm">
                     Already have an account?{" "}
