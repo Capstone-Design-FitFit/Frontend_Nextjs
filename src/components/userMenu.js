@@ -1,3 +1,5 @@
+'use client'
+
 import {
     Cloud,
     CreditCard,
@@ -29,15 +31,17 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
+import { useRouter } from 'next/navigation'
 
 
 const UserMenu = () => {
+    const router = useRouter();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                          stroke="currentColor" aria-hidden="true"
                          className="h-4 transition-all ease-in-out hover:scale-110 ">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
@@ -48,7 +52,7 @@ const UserMenu = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {router.push('/my-page')}}>
                         <User className="mr-2 h-4 w-4" />
                         <span>Profile</span>
                         <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
