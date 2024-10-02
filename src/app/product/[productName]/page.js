@@ -64,8 +64,8 @@ const ProductPage = ({ product }) => {
                                    className="h-full px-6 transition-all ease-in-out hover:scale-110 hover:text-black dark:hover:text-white flex items-center justify-center"
                                    href="/matte-black-magic-mug?image=1">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" aria-hidden="true" className="h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                         strokeWidth="1.5" stroke="currentColor" aria-hidden="true" className="h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
                                               d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
                                     </svg>
                                 </a></div>
