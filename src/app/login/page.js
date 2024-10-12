@@ -5,11 +5,61 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {useState} from "react";
+import {useAuth} from "@/app/authContext";
+import { useRouter } from "next/navigation";
 
 export const description =
-    "A login page with two columns. The first column has the login form with email and password. There's a Forgot your passwork link and a link to sign up if you do not have an account. The second column has a cover image."
+    "A login check-token with two columns. The first column has the login form with email and password. There's a Forgot your passwork link and a link to sign up if you do not have an account. The second column has a cover image."
 
 export default function Login() {
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const router = useRouter();
+    const { login } = useAuth();
+
+    const handleLogin = async () => {
+        const loginData = {
+            username: userName,
+            password: password,
+        };
+
+        if (userName.length === 0 || password.length === 0) {
+            alert("Enter All Information!");
+            return;
+        }
+
+        const formBody = new URLSearchParams();
+        formBody.append('username', loginData.username);
+        formBody.append('password', loginData.password);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",  // URL 인코딩된 형식 사용
+                },
+                body: formBody.toString(),  // 데이터를 URL 인코딩된 문자열로 전송
+            });
+
+            const data = await response.text();
+            console.log(data);
+
+            if (response.ok) {
+                const userData = {name : userName, userid : 1};
+                login(userData);
+                alert("로그인 성공");
+                router.push("/");
+            } else {
+                console.log(data);
+                alert("로그인 실패");
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Error during login: " + error);
+        }
+    };
+
     return (
         <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
             <div className="flex items-center justify-center py-12">
@@ -22,12 +72,13 @@ export default function Login() {
                     </div>
                     <div className="grid gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="username">User Name</Label>
                             <Input
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
+                                id="username"
+                                type="username"
+                                placeholder="Jisnoo"
                                 required
+                                onChange={(e) => setUserName(e.target.value)}
                             />
                         </div>
                         <div className="grid gap-2">
@@ -40,14 +91,19 @@ export default function Login() {
                                     Forgot your password?
                                 </Link>
                             </div>
-                            <Input id="password" type="password" required/>
+                            <Input
+                                id="password"
+                                type="password"
+                                required
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
-                        <Button type="submit" className="w-full">
+                        <Button type="button" className="w-full" onClick = {handleLogin}>
                             Login
                         </Button>
-                        <Button variant="outline" className="w-full">
-                            Login with Google
-                        </Button>
+                        {/*<Button variant="outline" className="w-full">*/}
+                        {/*    Login with Google*/}
+                        {/*</Button>*/}
                     </div>
                     <div className="mt-4 text-center text-sm">
                         Don&apos;t have an account?{" "}
