@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import { Skeleton } from "@/components/ui/skeleton"
+import Link from "next/link"
 import Image from 'next/image'
 
 // 예제 제품 데이터
@@ -19,10 +20,6 @@ const ProductPage = ({ product }) => {
 
     if (router.isFallback){
         return <Skeleton className="w-[100px] h-[20px] rounded-full" />;
-    }
-
-    const handleStartTryon = () => {
-        router.push('/camera-capture');
     }
 
     return (
@@ -145,10 +142,14 @@ const ProductPage = ({ product }) => {
                         <p>Add a little zing to your winter wardrobe with this vibrant Winter-breaker Jacket. With a
                             brushed fleece inside, and a relaxed unisex fit, this jacket is just the stuff of the
                             dreams, so be quick to grab yourself one!<br/><br/><span>Long sleeve ripstop jacket colorblocked in black. Rough pattern in obsidian black and brown printed throughout. Printed graphic in white throughout. Logo-woven webbing trim in white and black throughout. Bungee-style drawstring at hood featuring rubberized logo hardware. Zip closure at front. Rubberized logo appliqué at chest. Welt pockets and textile logo patch in orange at waist. Elasticized cuffs. Partially lined. Black hardware.</span>
-                        </p></div>
-                    <button onClick={handleStartTryon} className="relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:bg-blue-500">
+                        </p>
+                    </div>
+                    <Link href = {{
+                        pathname: '/camera-capture',
+                        query: { clothId : "t-shirt"},}}
+                        className="relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:bg-blue-500">
                         Start Try On!
-                    </button>
+                    </Link>
                 </div>
             </div>
             <div className="py-8"><h2 className="mb-4 text-2xl font-bold">Related Products</h2>
