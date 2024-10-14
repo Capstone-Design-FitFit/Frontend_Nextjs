@@ -15,6 +15,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@/components/ui/resizable"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useEffect, useState } from "react";
 import { useAuth } from "@/app/authContext";
@@ -27,7 +32,7 @@ export default function MyPage() {
     const { user, isLoading } = useAuth();
     const [photos, setPhotos] = useState([]); // 사진 데이터를 위한 상태 추가
     const router = useRouter();
-
+    const [tryOnPhotos, setTryOnPhotos] = useState([]);
 
 
     const loadUserFiles = async () => {
@@ -41,7 +46,7 @@ export default function MyPage() {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
+                // console.log(data);
                 setPhotos(data.photos); // 사진 데이터를 상태에 저장
             } else {
                 alert(data);
@@ -51,8 +56,28 @@ export default function MyPage() {
         }
     };
 
+    const loadTryonFiles = async () => {
+        if(!user) return;
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}${user.userid}/virtual-fittings`, {
+                method: 'GET',
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setTryOnPhotos(data); // 사진 데이터를 상태에 저장
+            } else {
+                alert(data);
+            }
+        } catch (error) {
+            alert(error);
+        }
+    }
     useEffect(() => {
         loadUserFiles();
+        loadTryonFiles();
     }, [user]);
 
     if (isLoading) {
@@ -80,75 +105,90 @@ export default function MyPage() {
     return (
         <div className="flex w-full flex-col bg-muted/40">
             {user ? (
-                <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-                    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+            <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+                <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-1">
-                        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
+                        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
                             <Card x-chunk="dashboard-05-chunk-1">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-4xl">Poses</CardTitle>
-                                    <CardDescription>Poses that you uploaded or shoot</CardDescription>
+                                    <CardTitle className="text-3xl">FitFit!</CardTitle>
+                                    <CardDescription>Virtual tryon results</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Carousel
-                                        opts={{ align: "start" }}
-                                        className="w-full max-w-sm"
-                                    >
-                                        <CarouselContent>
-                                            {photos.map((photo, index) => (
-                                                <CarouselItem key={photo.photoId} className="md:basis-1/2 lg:basis-1/3">
-                                                    <div className="p-1">
-                                                        <Card>
-                                                            <CardContent className="flex aspect-square items-center justify-center p-6">
-                                                                <Image
-                                                                    src={photo.photoUrl}
-                                                                    alt={`Photo ${index + 1}`}
-                                                                    width={300}
-                                                                    height={300}
-                                                                    className="object-cover"
-                                                                />
-                                                            </CardContent>
-                                                        </Card>
+                                    <Carousel opts={{align:"start"}} className="w-full">
+                                        <CarouselContent className="gap-6 flex flex-wrap justify-center"> {/* 각 항목 사이에 간격 추가 */}
+                                            {tryOnPhotos.map((tryonPhoto) => (
+                                                <CarouselItem key={tryonPhoto.fittingId} className="md:basis-1/5 lg:basis-1/4 flex justify-center">
+                                                    <div className="flex flex-row items-center space--4"> {/* 이미지들 간의 간격을 추가 */}
+                                                        <Image
+                                                            src={tryonPhoto.fittingImageUrl}
+                                                            width={200}
+                                                            height={200}
+                                                            alt="Fitting Result"
+                                                            className="rounded-md shadow-md"
+                                                        />
+                                                        <Image
+                                                            src={tryonPhoto.photo.photoUrl}
+                                                            width={200}
+                                                            height={200}
+                                                            alt="User Photo"
+                                                            className="rounded-md shadow-md"
+                                                        />
+                                                        <Image
+                                                            src={tryonPhoto.clothing.clothingImageUrl}
+                                                            width={200}
+                                                            height={200}
+                                                            alt="Clothing Image"
+                                                            className="rounded-md shadow-md"
+                                                        />
                                                     </div>
                                                 </CarouselItem>
                                             ))}
                                         </CarouselContent>
-                                        <CarouselPrevious />
-                                        <CarouselNext />
+                                        <CarouselPrevious className="absolute left-2"/>
+                                        <CarouselNext className="absolute right-2"/>
                                     </Carousel>
                                 </CardContent>
                             </Card>
-                            <Card x-chunk="dashboard-05-chunk-2">
+                            <Card x-chunk="dashboard-05-chunk-1">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-4xl">Clothes</CardTitle>
-                                    <CardDescription>Clothes you uploaded</CardDescription>
+                                    <CardTitle className="text-3xl">Poses</CardTitle>
+                                    <CardDescription>Poses that you uploaded or shoot</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Carousel
-                                        opts={{ align: "start" }}
-                                        className="w-full max-w-sm"
-                                    >
-                                        <CarouselContent>
+                                    <Carousel opts={{align:"start"}} className="w-full">
+                                        <CarouselContent className="gap-4"> {/* 여기서 gap을 추가 */}
                                             {photos.map((photo, index) => (
-                                                <CarouselItem key={photo.photoId} className="md:basis-1/2 lg:basis-1/3">
-                                                    <div className="p-1">
-                                                        <Card>
-                                                            <CardContent className="flex aspect-square items-center justify-center p-6">
-                                                                <Image
-                                                                    src={photo.photoUrl}
-                                                                    alt={`Clothing Photo ${index + 1}`}
-                                                                    width={300}
-                                                                    height={300}
-                                                                    className="object-cover"
-                                                                />
-                                                            </CardContent>
-                                                        </Card>
+                                                <CarouselItem key={photo.photoId} className="md:basis-1/4 lg:basis-1/6">
+                                                    <div className="flex flex-col items-center space-y-2">
+                                                        <Image src={photo.photoUrl} width={200} height={200} alt="" className="rounded-md shadow-md" />
                                                     </div>
                                                 </CarouselItem>
                                             ))}
                                         </CarouselContent>
-                                        <CarouselPrevious />
-                                        <CarouselNext />
+                                        <CarouselPrevious className="absolute left-2"/>
+                                        <CarouselNext className="absolute right-2"/>
+                                    </Carousel>
+                                </CardContent>
+                            </Card>
+                            <Card x-chunk="dashboard-05-chunk-1">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-3xl">Clohtes</CardTitle>
+                                    <CardDescription>Clothes that you uploaded</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Carousel opts={{align:"start"}} className="w-full">
+                                        <CarouselContent className="gap-4"> {/* 여기서 gap을 추가 */}
+                                            {photos.map((photo, index) => (
+                                                <CarouselItem key={photo.photoId} className="md:basis-1/4 lg:basis-1/6">
+                                                    <div className="flex flex-col items-center space-y-2">
+                                                        <Image src={photo.photoUrl} width={200} height={200} alt="" className="rounded-md shadow-md" />
+                                                    </div>
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                        <CarouselPrevious className="absolute left-2"/>
+                                        <CarouselNext className="absolute right-2"/>
                                     </Carousel>
                                 </CardContent>
                             </Card>
