@@ -8,7 +8,7 @@ import { vectorizeAndNormalize, cosineDistanceMatching, convertStructure } from 
 import PoseCombobox from './poseCombobox'
 import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/app/camera-capture/posesData";
 import { Scene, PerspectiveCamera, WebGLRenderer, MeshBasicMaterial, SphereGeometry, Mesh, LineBasicMaterial, BufferGeometry, Line, Vector3 } from 'three';
-import {useRouter} from "next/navigation";
+import { useSearchParams } from 'next/navigation'
 
 const WebcamCapture = () => {
     const webcamRef = useRef(null);
@@ -22,9 +22,9 @@ const WebcamCapture = () => {
     const [wholeBodyScore, setWholeBodyScore] = useState(0);
     const [leftBodyScore, setLeftBodyScore] = useState(0);
     const [rightBodyScore, setRightBodyScore] = useState(0);
-    const [imageSrc, setImageSrc] = useState('');
-
-    const router = useRouter();
+    const searchParams = useSearchParams();
+    const clothId = searchParams.get('clothId');
+    const imageSrc = `/images/${clothId}.jpg`
 
     useEffect(() => {
         const loadModel = async () => {
@@ -193,7 +193,7 @@ const WebcamCapture = () => {
     }, [selectPose]);
 
     useEffect(() => {
-        if (wholeBodyScore >= 0.95) {
+        if (wholeBodyScore >= 0.8) {
             if (!captured) {
                 setCaptured(true);
                 captureAndSendImage();
@@ -201,21 +201,52 @@ const WebcamCapture = () => {
         }
     }, [wholeBodyScore, captured]);
 
+    const savePhoto = async (data) => {
+        const bodyData = {
+            vton_path: data.vton_path,
+            garm_path: data.garm_path,
+            output_file_path: data.output_file_path,
+        };
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_FAST_API_URL}save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",  // URL 인코딩된 형식 사용
+                },
+                body: JSON.stringify(bodyData),  // 데이터를 URL 인코딩된 문자열로 전송
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log(data);
+                alert("저장 성공");
+            } else {
+                console.log(data);
+                alert("저장 실패");
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Error during login: " + error);
+        }
+    }
     const captureAndSendImage = async () => {
         const canvas = canvasRef.current;
         const vtonImage = canvas.toDataURL('image/png');
 
         setUserImage(vtonImage);
 
-        const blob = await (await fetch(vtonImage)).blob();
+        const userBlob = await (await fetch(vtonImage)).blob();
+        const clothBlob = await (await fetch(imageSrc)).blob();
 
         const formData = new FormData();
-        formData.append('garm_img', imageSrc, 'garment_image.png');
-        formData.append('vton_img', blob, 'pose_capture.png');
+        formData.append('garm_img', clothBlob, 'garment_image.png');
+        formData.append('vton_img', userBlob, 'pose_capture.png');
         formData.append('user_id','1');
-
+        console.log(clothBlob)
         try {
-            const response = await fetch('http://localhost:8000/api/tryon', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_FAST_API_URL}viton`, {
                 method: 'POST',
                 body: formData,
             });
@@ -224,11 +255,15 @@ const WebcamCapture = () => {
             setResultImage(`data:image/jpeg;base64,${data.result.encoded_image}`);
 
             if (response.ok) {
+                console.log(data)
                 alert('Image successfully sent to the server!');
+                savePhoto(data);
             } else {
+                console.log(data)
                 alert('Failed to send image to the server.');
             }
         } catch (error) {
+            console.log(data)
             alert('Error sending image to the server:', error);
         }
     };
