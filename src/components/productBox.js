@@ -5,7 +5,6 @@ const ProductBox = ({ product }) => {
 
     return (
         <li key = {product.name} className="relative aspect-square h-[30vh] max-h-[275px] w-2/3 max-w-[475px] flex-none md:w-1/3">
-
             <Link className="relative h-full w-full" href={`/product/${product.name}`}>
                 <div
                     className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
