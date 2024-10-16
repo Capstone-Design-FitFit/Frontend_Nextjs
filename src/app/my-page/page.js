@@ -24,6 +24,18 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useEffect, useState } from "react";
 import { useAuth } from "@/app/authContext";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export const description =
     "An orders my-page with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. The main area has a list of recent orders with a filter and export button. The main area also has a detailed view of a single order with order details, shipping information, billing information, customer information, and payment information."
@@ -116,31 +128,52 @@ export default function MyPage() {
                                 </CardHeader>
                                 <CardContent>
                                     <Carousel opts={{align:"start"}} className="w-full">
-                                        <CarouselContent className="gap-6 flex flex-wrap justify-center"> {/* 각 항목 사이에 간격 추가 */}
-                                            {tryOnPhotos.map((tryonPhoto) => (
-                                                <CarouselItem key={tryonPhoto.fittingId} className="md:basis-1/5 lg:basis-1/4 flex justify-center">
-                                                    <div className="flex flex-row items-center space--4"> {/* 이미지들 간의 간격을 추가 */}
-                                                        <Image
-                                                            src={tryonPhoto.fittingImageUrl}
-                                                            width={200}
-                                                            height={200}
-                                                            alt="Fitting Result"
-                                                            className="rounded-md shadow-md"
-                                                        />
-                                                        <Image
-                                                            src={tryonPhoto.photo.photoUrl}
-                                                            width={200}
-                                                            height={200}
-                                                            alt="User Photo"
-                                                            className="rounded-md shadow-md"
-                                                        />
-                                                        <Image
-                                                            src={tryonPhoto.clothing.clothingImageUrl}
-                                                            width={200}
-                                                            height={200}
-                                                            alt="Clothing Image"
-                                                            className="rounded-md shadow-md"
-                                                        />
+                                        <CarouselContent className="gap-4 flex items-center"> {/* 여기서 gap을 추가 */}
+                                            {tryOnPhotos.map((tryOnPhoto ) => (
+                                                <CarouselItem key={tryOnPhoto.fittingId} className="md:basis-1/4 lg:basis-1/6">
+                                                    <div className="flex flex-col items-center space-y-2">
+                                                        <Dialog>
+                                                            <DialogTrigger asChild>
+                                                                <Image src={tryOnPhoto.fittingImageUrl} width={200} height={200} alt="" className="rounded-md shadow-md" />
+                                                            </DialogTrigger>
+                                                            <DialogContent className="sm:max-w-[425px]">
+                                                                <DialogHeader>
+                                                                    <DialogTitle>가상 피팅</DialogTitle>
+                                                                    <DialogDescription>
+                                                                        가상 피팅에 진행된 사진들
+                                                                    </DialogDescription>
+                                                                </DialogHeader>
+                                                                <div className="grid gap-4 py-4">
+                                                                    <div className="grid grid-cols-2 items-center gap-4">
+                                                                        <Label htmlFor="name" className="text-center">
+                                                                            You
+                                                                        </Label>
+                                                                        <Label htmlFor="clothes" className="text-center">
+                                                                            Clothes
+                                                                        </Label>
+                                                                    </div>
+                                                                    <div className="grid grid-cols-2 items-center gap-4">
+                                                                        <Image
+                                                                            src={tryOnPhoto.photo.photoUrl}
+                                                                            width={200}
+                                                                            height={200}
+                                                                            alt="User Photo"
+                                                                            className="rounded-md shadow-md"
+                                                                        />
+                                                                        <Image
+                                                                            src={tryOnPhoto.clothing.clothingImageUrl}
+                                                                            width={200}
+                                                                            height={200}
+                                                                            alt="Clothing Image"
+                                                                            className="rounded-md shadow-md"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                {/*<DialogFooter>*/}
+                                                                {/*    <Button type="submit">Save changes</Button>*/}
+                                                                {/*</DialogFooter>*/}
+                                                            </DialogContent>
+                                                        </Dialog>
                                                     </div>
                                                 </CarouselItem>
                                             ))}
@@ -149,6 +182,37 @@ export default function MyPage() {
                                         <CarouselNext className="absolute right-2"/>
                                     </Carousel>
                                 </CardContent>
+                                {/*<CardContent>*/}
+                                {/*    <Carousel opts={{align:"start"}} className="w-full">*/}
+                                {/*        <CarouselContent className="gap-4 flex items-center"> /!* 각 항목 사이에 간격 추가 *!/*/}
+                                {/*            {tryOnPhotos.map((tryonPhoto) => (*/}
+                                {/*                <>*/}
+                                {/*                    <CarouselItem key={tryonPhoto.fittingId} className="sm:basis-full md:basis-1/4 lg:basis-1/6">*/}
+                                {/*                        <div className="flex flex-col items-center"> /!* 이미지들 간의 간격을 추가 *!/*/}
+                                {/*                            <Image*/}
+                                {/*                                src={tryonPhoto.fittingImageUrl}*/}
+                                {/*                                width={200}*/}
+                                {/*                                height={200}*/}
+                                {/*                                alt="Fitting Result"*/}
+                                {/*                                className="rounded-md shadow-md"*/}
+                                {/*                            />*/}
+                                {/*                        </div>*/}
+                                {/*                    </CarouselItem>*/}
+                                {/*                    <CarouselItem key={tryonPhoto.fittingId} className="sm:basis-full md:basis-1/4 lg:basis-1/6">*/}
+                                {/*                        <div className="flex flex-col items-center">*/}
+                                {/*                        </div>*/}
+                                {/*                    </CarouselItem>*/}
+                                {/*                    <CarouselItem key={tryonPhoto.fittingId} className="sm:basis-full md:basis-1/4 lg:basis-1/6">*/}
+                                {/*                        <div className="flex flex-col items-center">*/}
+                                {/*                        </div>*/}
+                                {/*                    </CarouselItem>*/}
+                                {/*                </>*/}
+                                {/*            ))}*/}
+                                {/*        </CarouselContent>*/}
+                                {/*        <CarouselPrevious className="absolute left-2"/>*/}
+                                {/*        <CarouselNext className="absolute right-2"/>*/}
+                                {/*    </Carousel>*/}
+                                {/*</CardContent>*/}
                             </Card>
                             <Card x-chunk="dashboard-05-chunk-1">
                                 <CardHeader className="pb-2">
