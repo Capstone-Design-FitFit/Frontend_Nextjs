@@ -51,7 +51,7 @@ export default function MyPage() {
         if (!user) return;
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}${user.userid}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/${user.userid}`, {
                 method: 'GET',
             });
 
@@ -72,7 +72,7 @@ export default function MyPage() {
         if(!user) return;
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}${user.userid}/virtual-fittings`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/${user.userid}/virtual-fittings`, {
                 method: 'GET',
             });
 
