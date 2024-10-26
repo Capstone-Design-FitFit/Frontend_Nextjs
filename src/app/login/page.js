@@ -19,22 +19,17 @@ export default function Login() {
     const { login } = useAuth();
 
     const handleLogin = async () => {
-        const loginData = {
-            username: userName,
-            password: password,
-        };
-
         if (userName.length === 0 || password.length === 0) {
             alert("Enter All Information!");
             return;
         }
 
         const formBody = new URLSearchParams();
-        formBody.append('username', loginData.username);
-        formBody.append('password', loginData.password);
+        formBody.append('username', userName);
+        formBody.append('password', password);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}login`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",  // URL 인코딩된 형식 사용
