@@ -33,7 +33,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from 'next/navigation'
-import { useAuth } from "@/app/authContext";
+import { useAuth } from "@/app/AuthContext";
 
 const UserMenu = () => {
     const router = useRouter();

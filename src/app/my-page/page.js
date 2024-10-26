@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/resizable"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useEffect, useState } from "react";
-import { useAuth } from "@/app/authContext";
+import { useAuth } from "@/app/AuthContext";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import {
