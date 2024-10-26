@@ -4,8 +4,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import '@tensorflow/tfjs-backend-webgl';
-import { vectorizeAndNormalize, cosineDistanceMatching, convertStructure } from './cosineSimilarity';
-import PoseCombobox from './poseCombobox'
+import { vectorizeAndNormalize, cosineDistanceMatching, convertStructure } from './CosineSimilarity';
+import PoseCombobox from './PoseCombobox'
 import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/app/camera-capture/PosesData";
 import { useSearchParams } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
