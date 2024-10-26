@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const login = (userData) => {
         setUser(userData);
         // 로컬 스토리지에 사용자 정보를 저장하여 새로고침 후에도 유지
-        localStorage.setItem('user', JSON.stringify(userData));
+        sessionStorage.setItem('user', JSON.stringify(userData));
         console.log(userData);
         console.log(user);
     };
@@ -23,12 +23,12 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         console.log("Logout");
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
     };
 
     // 페이지 새로고침 시 로컬 스토리지에서 사용자 정보 가져오기
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
