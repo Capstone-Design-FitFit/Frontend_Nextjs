@@ -34,26 +34,6 @@ export default function Home() {
 
     return (
         <>
-            <style>{`
-                /* 애니메이션 keyframes 정의 */
-                @keyframes marquee {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
-
-                /* 애니메이션 적용 */
-                .animate-carousel {
-                    display: flex; /* 수평 정렬을 위해 flexbox 사용 */
-                    animation: marquee 60s linear infinite; /* 애니메이션 적용 */
-                    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-                    overflow: hidden; /* overflow 숨기기 */
-                    width: 200%; /* 애니메이션 효과를 위해 넓이 증가 */
-                }
-            `}</style>
             <section className="mx-auto grid max-w-screen-2xl gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2">
                 <div className="md:col-span-4 md:row-span-2">
                     <a className="relative block aspect-square h-full w-full" href={`/product/${Jacket.name}`}>
@@ -69,7 +49,8 @@ export default function Home() {
                                  width: '100%',
                                  inset: '0px',
                                  color: 'transparent',
-                             }}/>
+                             }}
+                        />
                         <div
                             className="absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label lg:px-20 lg:pb-[35%]">
                             <div
@@ -98,7 +79,8 @@ export default function Home() {
                                  width: '100%',
                                  inset: '0px',
                                  color: 'transparent',
-                             }}/>
+                             }}
+                        />
                         <div className="absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label">
                             <div
                                 className="flex items-center rounded-full border bg-white/70 p-1 text-xs font-semibold text-black backdrop-blur-md dark:border-neutral-800 dark:bg-black/70 dark:text-white">
@@ -143,9 +125,7 @@ export default function Home() {
                 </a></div>
             </section>
             <div className="w-full overflow-x-auto pb-6 pt-1">
-                <ul className="flex gap-4 animate-carousel">
-                    <ProductBox product={product}></ProductBox>
-                    <ProductBox product={product}></ProductBox>
+                <ul className="flex gap-4">
                     <ProductBox product={product}></ProductBox>
                     <ProductBox product={product}></ProductBox>
                     <ProductBox product={product}></ProductBox>
