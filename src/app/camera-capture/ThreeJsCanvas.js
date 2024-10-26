@@ -2,7 +2,7 @@
 
 import { Scene, PerspectiveCamera, WebGLRenderer, MeshBasicMaterial, SphereGeometry, Mesh, LineBasicMaterial, BufferGeometry, Line, Vector3 } from 'three';
 import React, {useEffect, useRef} from "react";
-import {armsDownPose, leftArmUpPose, rightArmUpPose} from "@/app/camera-capture/posesData";
+import {armsDownPose, leftArmUpPose, rightArmUpPose} from "@/app/camera-capture/PosesData";
 
 export default function ThreeJsCanvas({selectPose}) {
     const threeCanvasRef = useRef(null);

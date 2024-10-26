@@ -6,7 +6,7 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import '@tensorflow/tfjs-backend-webgl';
 import { vectorizeAndNormalize, cosineDistanceMatching, convertStructure } from './cosineSimilarity';
 import PoseCombobox from './poseCombobox'
-import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/app/camera-capture/posesData";
+import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/app/camera-capture/PosesData";
 import { useSearchParams } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import ThreeJsCanvas from "@/app/camera-capture/ThreeJsCanvas";
