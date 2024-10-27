@@ -67,9 +67,11 @@ const ProductPage = ({ product }) => {
                             dreams, so be quick to grab yourself one!<br/><br/><span>Long sleeve ripstop jacket colorblocked in black. Rough pattern in obsidian black and brown printed throughout. Printed graphic in white throughout. Logo-woven webbing trim in white and black throughout. Bungee-style drawstring at hood featuring rubberized logo hardware. Zip closure at front. Rubberized logo appliqué at chest. Welt pockets and textile logo patch in orange at waist. Elasticized cuffs. Partially lined. Black hardware.</span>
                         </p>
                     </div>
-                    <Link href = {{
-                        pathname: '/camera-capture',
-                        query: { clothId : "t-shirt"},}}
+                    <Link
+                        href = {{
+                            pathname: '/camera-capture',
+                            query: { clothId : productName},
+                        }}
                         className="relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:bg-blue-500">
                         Start Try On!
                     </Link>
