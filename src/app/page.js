@@ -39,7 +39,7 @@ export default function Home() {
                     <a className="relative block aspect-square h-full w-full" href={`/product/${Jacket.name}`}>
                     <div
                         className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
-                        <img alt="Lightweight Jacket" fetchPriority="high" decoding="async" data-nimg="fill"
+                        <img alt="Lightweight Jacket"
                              className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
                              sizes="(min-width: 768px) 66vw, 100vw"
                              src={Jacket.imageUrl}
@@ -49,6 +49,7 @@ export default function Home() {
                                  width: '100%',
                                  inset: '0px',
                                  color: 'transparent',
+                                 objectFit: 'cover',
                              }}
                         />
                         <div
@@ -79,6 +80,7 @@ export default function Home() {
                                  width: '100%',
                                  inset: '0px',
                                  color: 'transparent',
+                                 objectFit: 'cover',
                              }}
                         />
                         <div className="absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label">
@@ -108,6 +110,7 @@ export default function Home() {
                                  width: '100%',
                                  inset: '0px',
                                  color: 'transparent',
+                                 objectFit: 'cover',
                              }}
                         />
                         <div className="absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label">
