@@ -12,22 +12,26 @@ import { useToast } from "@/hooks/use-toast"
 import ThreeJsCanvas from "@/app/camera-capture/ThreeJsCanvas";
 import ScoreCanvas from "@/app/camera-capture/ScoreCanvas";
 import {UserImageDialog} from "@/app/camera-capture/UserImageDialog";
+import {ResultImageDialog} from "@/app/camera-capture/ResultImageDialog";
+import {LoadingAlert} from "@/app/camera-capture/LoadingAlert";
 
 const WebcamCapture = () => {
     const webcamRef = useRef(null);
     const [detector, setDetector] = useState(null);
     const [captured, setCaptured] = useState(false);
     const [userImage, setUserImage] = useState(null);
-    const [resultImage, setResultImage] = useState(null);
     const [selectPose, setSelectPose] = useState("");
     const [wholeBodyScore, setWholeBodyScore] = useState(0);
     const [leftBodyScore, setLeftBodyScore] = useState(0);
     const [rightBodyScore, setRightBodyScore] = useState(0);
     const [startTryOn, setStartTryOn] = useState(false);
+    const [tryOnComplete, setTryOnComplete] = useState(false);
     const searchParams = useSearchParams();
     const clothId = searchParams.get('clothId');
     const clothImage = `/images/${clothId}.jpg`;
     const { toast } = useToast();
+    let resultJSON;
+    let resultImageURL;
 
     useEffect(() => {
         const loadModel = async () => {
@@ -119,7 +123,7 @@ const WebcamCapture = () => {
     }, [detector, selectPose]);
 
     useEffect(() => {
-        if (wholeBodyScore >= 0.8) {
+        if (wholeBodyScore >= 0.85) {
             setCaptured(true);
         }
     }, [wholeBodyScore]);
@@ -141,38 +145,6 @@ const WebcamCapture = () => {
         }
     },[captured]);
 
-
-    // const savePhoto = async (data) => {
-    //     const bodyData = {
-    //         vton_path: data.vton_path,
-    //         garm_path: data.garm_path,
-    //         output_file_path: data.output_file_path,
-    //     };
-    //
-    //     try {
-    //         const response = await fetch(`${process.env.NEXT_PUBLIC_FAST_API_URL}/save`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",  // URL 인코딩된 형식 사용
-    //             },
-    //             body: JSON.stringify(bodyData),  // 데이터를 URL 인코딩된 문자열로 전송
-    //         });
-    //
-    //         const data = await response.json();
-    //         console.log(data);
-    //
-    //         if (response.ok) {
-    //             alert("저장 성공");
-    //         } else {
-    //             console.log(data);
-    //             alert("저장 실패");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         alert("Error during login: " + error);
-    //     }
-    // }
-
     useEffect(() => {
         const runCapture = async () => {
             if (startTryOn) {
@@ -181,6 +153,27 @@ const WebcamCapture = () => {
         };
         runCapture();
     }, [startTryOn]);
+
+    const saveImage = async() => {
+        setStartTryOn(false);
+        try{
+            const response = await fetch(`${process.env.NEXT_PUBLIC_FAST_API_URL}/save`, {
+                method: 'POST',
+                headers : {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultJSON),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                resultImageURL = data['result_url'];
+                setTryOnComplete(true);
+            }
+        } catch(error) {
+            alert(error);
+        }
+    }
 
     const sendImage = async () => {
         toast({
@@ -195,11 +188,14 @@ const WebcamCapture = () => {
 
         const userBlob = await (await fetch(userImage)).blob();
         const formData = new FormData();
-        const response = await fetch (clothImage);
+        const response = await fetch (clothImage,{
+            method:'GET',
+        });
         const clothBlob = await response.blob();
 
-        formData.append('garm_img', clothBlob, 'garment_image.png');
-        formData.append('vton_img', userBlob, 'pose_capture.png');
+        const timestamp = Date.now();
+        formData.append('garm_img', clothBlob, 'clothes.png');
+        formData.append('vton_img', userBlob, `${timestamp}_pose_capture.png`);
         formData.append('user_id','1');
 
         try {
@@ -208,19 +204,18 @@ const WebcamCapture = () => {
                 body: formData,
             });
 
-            const data = await response.json();
-            setResultImage(`data:image/jpeg;base64,${data.result.encoded_image}`);
-
             if (response.ok) {
-                console.log(data)
-                alert('Image successfully sent to the server!');
-                // savePhoto(data);
+                const data = await response.json();
+                alert('가상 피팅 완료');
+                resultJSON = data;
+                await saveImage();
             } else {
-                console.log(data)
-                alert('Failed to send image to the server.');
+                alert('가상 피팅 실패');
+                setStartTryOn(false);
             }
         } catch (error) {
             alert(error);
+            setStartTryOn(false);
         }
     };
 
@@ -228,7 +223,20 @@ const WebcamCapture = () => {
         <div align={'center'}>
             <PoseCombobox value={selectPose} setValue={setSelectPose}/>
             <ScoreCanvas wholeBodyScore={wholeBodyScore} leftBodyScore={leftBodyScore} rightBodyScore={rightBodyScore} />
-            {userImage && <UserImageDialog userImage={userImage} clothImage = {clothImage} setStartTryOn={setStartTryOn}/>}
+            {userImage && captured &&
+                <UserImageDialog
+                    userImage={userImage}
+                    clothImage={clothImage}
+                    setCaptured={setCaptured}
+                    setStartTryOn={setStartTryOn}
+                />
+            }
+            {tryOnComplete &&
+                <ResultImageDialog
+                    resultImageURL={resultImageURL}
+                />
+            }
+            {startTryOn && <LoadingAlert/>}
             <div className="flex justify-center items-center w-screen h-screen overflow-hidden">
                 <div className="relative w-full h-full">
                     <video
@@ -251,14 +259,6 @@ const WebcamCapture = () => {
                 </div>
             </div>
             {/*<ThreeJsCanvas selectPose={selectPose}/>*/}
-            {resultImage && (
-                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px'}}>
-                    <div style={{margin: '10px'}}>
-                        <h3>Result Image</h3>
-                        <img src={resultImage} alt="Virtual Try-On Result" style={{width: '500px'}}/>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
