@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button"
 import React from "react";
 
-export function UserImageDialog({userImage,clothImage,setStartTryOn}) {
+export function UserImageDialog({userImage,clothImage,setCaptured,setStartTryOn}) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -31,8 +31,8 @@ export function UserImageDialog({userImage,clothImage,setStartTryOn}) {
                     <img src={clothImage} alt="Virtual Try-On Result" style={{width: '500px'}}/>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick = {() => setStartTryOn(true)}>Continue</AlertDialogAction>
+                    <AlertDialogCancel onClick = {() => setCaptured(false)}>Again</AlertDialogCancel>
+                    <AlertDialogAction onClick = {() => setStartTryOn(true)}>Start TryOn!</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
