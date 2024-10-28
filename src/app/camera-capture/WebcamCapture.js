@@ -17,6 +17,7 @@ import {LoadingAlert} from "@/app/camera-capture/LoadingAlert";
 
 const WebcamCapture = () => {
     const webcamRef = useRef(null);
+    const canvasRef = useRef(null);
     const [detector, setDetector] = useState(null);
     const [captured, setCaptured] = useState(false);
     const [userImage, setUserImage] = useState(null);
@@ -123,6 +124,40 @@ const WebcamCapture = () => {
     }, [detector, selectPose]);
 
     useEffect(() => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+
+        // 캔버스 크기를 비디오 크기와 일치시키기
+        canvas.width = 540;
+        canvas.height = 700;
+
+        // 격자 그리기
+        const drawGrid = () => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            context.lineWidth = 1;
+
+            // 세로선 (3등분)
+            for (let i = 1; i < 3; i++) {
+                context.beginPath();
+                context.moveTo((canvas.width / 3) * i, 0);
+                context.lineTo((canvas.width / 3) * i, canvas.height);
+                context.stroke();
+            }
+
+            // 가로선 (3등분)
+            for (let i = 1; i < 3; i++) {
+                context.beginPath();
+                context.moveTo(0, (canvas.height / 3) * i);
+                context.lineTo(canvas.width, (canvas.height / 3) * i);
+                context.stroke();
+            }
+        };
+
+        drawGrid(); // 격자 처음에 그리기
+    }, []);
+
+    useEffect(() => {
         if (wholeBodyScore >= 0.85) {
             setCaptured(true);
         }
@@ -194,7 +229,7 @@ const WebcamCapture = () => {
         const clothBlob = await response.blob();
 
         const timestamp = Date.now();
-        formData.append('garm_img', clothBlob, 'clothes.png');
+        formData.append('garm_img', clothBlob, `${timestamp}_clothes.png`);
         formData.append('vton_img', userBlob, `${timestamp}_pose_capture.png`);
         formData.append('user_id','1');
 
@@ -237,24 +272,20 @@ const WebcamCapture = () => {
                 />
             }
             {startTryOn && <LoadingAlert/>}
-            <div className="flex justify-center items-center w-screen h-screen overflow-hidden">
-                <div className="relative w-full h-full">
+            <div className="relative w-full h-min flex justify-center items-center">
+                <div className="relative aspect-[3/4] w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl">
                     <video
                         ref={webcamRef}
-                        style={{
-                            display: 'block',
-                            position: 'relative',
-                            top: 0,
-                            left: 0,
-                            zIndex: 0,
-                            width: '540px',
-                            height: '700px',
-                        }}
+                        className="absolute top-0 left-0 w-full h-full object-cover z-0"
                         autoPlay
                         playsInline
                         muted
                         width="640"
                         height="700"
+                    />
+                    <canvas
+                        ref={canvasRef}
+                        className="absolute top-0 left-0 w-full h-full z-10"
                     />
                 </div>
             </div>
