@@ -33,6 +33,10 @@ const WebcamCapture = () => {
     const { toast } = useToast();
     let resultJSON;
     let resultImageURL;
+    const scoreBufferSize = 5;
+    const wholeBodyScoreBuffer = useRef([]);
+    const leftBodyScoreBuffer = useRef([]);
+    const rightBodyScoreBuffer = useRef([]);
 
     useEffect(() => {
         const loadModel = async () => {
@@ -113,13 +117,17 @@ const WebcamCapture = () => {
                     const targetPoseVector = vectorizeAndNormalize(targetPose, allBody);
                     const cosineScore = 1 - cosineDistanceMatching(userPoseVector, targetPoseVector);
 
-                    setWholeBodyScore(cosineScore);
-                    setLeftBodyScore(leftCosineScore);
-                    setRightBodyScore(rightCosineScore);
+                    updateScoreBuffer(wholeBodyScoreBuffer, cosineScore);
+                    updateScoreBuffer(leftBodyScoreBuffer, leftCosineScore);
+                    updateScoreBuffer(rightBodyScoreBuffer, rightCosineScore);
+
+                    setWholeBodyScore(averageScore(wholeBodyScoreBuffer.current));
+                    setLeftBodyScore(averageScore(leftBodyScoreBuffer.current));
+                    setRightBodyScore(averageScore(rightBodyScoreBuffer.current));
                 }
             }
         };
-        const interval = setInterval(detectPose, 100);
+        const interval = setInterval(detectPose, 200);
         return () => clearInterval(interval);
     }, [detector, selectPose]);
 
@@ -188,6 +196,18 @@ const WebcamCapture = () => {
         };
         runCapture();
     }, [startTryOn]);
+
+    const updateScoreBuffer = (bufferRef, score) => {
+        if (bufferRef.current.length >= scoreBufferSize) {
+            bufferRef.current.shift();
+        }
+        bufferRef.current.push(score);
+    };
+
+    const averageScore = (buffer) => {
+        const sum = buffer.reduce((acc, val) => acc + val, 0);
+        return sum / buffer.length;
+    };
 
     const saveImage = async() => {
         setStartTryOn(false);
@@ -287,9 +307,9 @@ const WebcamCapture = () => {
                         ref={canvasRef}
                         className="absolute top-0 left-0 w-full h-full z-10"
                     />
+                    <ThreeJsCanvas selectPose={selectPose}/>
                 </div>
             </div>
-            {/*<ThreeJsCanvas selectPose={selectPose}/>*/}
         </div>
     );
 };
