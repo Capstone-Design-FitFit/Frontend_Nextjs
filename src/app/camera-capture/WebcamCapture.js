@@ -27,12 +27,12 @@ const WebcamCapture = () => {
     const [rightBodyScore, setRightBodyScore] = useState(0);
     const [startTryOn, setStartTryOn] = useState(false);
     const [tryOnComplete, setTryOnComplete] = useState(false);
+    const [resultImageURL, setResultImageURL] = useState("");
     const searchParams = useSearchParams();
     const clothId = searchParams.get('clothId');
     const clothImage = `/images/${clothId}.jpg`;
     const { toast } = useToast();
     let resultJSON;
-    let resultImageURL;
     const scoreBufferSize = 5;
     const wholeBodyScoreBuffer = useRef([]);
     const leftBodyScoreBuffer = useRef([]);
@@ -166,7 +166,7 @@ const WebcamCapture = () => {
     }, []);
 
     useEffect(() => {
-        if (wholeBodyScore >= 0.85) {
+        if (wholeBodyScore >= 0.8) {
             setCaptured(true);
         }
     }, [wholeBodyScore]);
@@ -222,7 +222,7 @@ const WebcamCapture = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                resultImageURL = data['result_url'];
+                setResultImageURL(data['result_url']);
                 setTryOnComplete(true);
             }
         } catch(error) {
