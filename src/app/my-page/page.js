@@ -88,7 +88,7 @@ export default function MyPage() {
         }
     }
     useEffect(() => {
-        loadUserFiles();
+        // loadUserFiles();
         loadTryonFiles();
     }, [user]);
 
@@ -134,7 +134,7 @@ export default function MyPage() {
                                                     <div className="flex flex-col items-center space-y-2">
                                                         <Dialog>
                                                             <DialogTrigger asChild>
-                                                                <Image src={tryOnPhoto.fittingImageUrl} width={200} height={200} alt="" className="rounded-md shadow-md" />
+                                                                <Image src={tryOnPhoto.fittingImageUrl} width={200} height={200} alt="Fitting Image" className="rounded-md shadow-md" />
                                                             </DialogTrigger>
                                                             <DialogContent className="sm:max-w-[425px]">
                                                                 <DialogHeader>
@@ -144,15 +144,14 @@ export default function MyPage() {
                                                                     </DialogDescription>
                                                                 </DialogHeader>
                                                                 <div className="grid gap-4 py-4">
-                                                                    <div className="grid grid-cols-2 items-center gap-4">
-                                                                        <Label htmlFor="name" className="text-center">
-                                                                            You
-                                                                        </Label>
-                                                                        <Label htmlFor="clothes" className="text-center">
-                                                                            Clothes
-                                                                        </Label>
+                                                                    <div
+                                                                        className="grid grid-cols-3 items-center gap-4 text-center">
+                                                                        <Label htmlFor="name">You</Label>
+                                                                        <Label htmlFor="clothes">Clothes</Label>
+                                                                        <Label htmlFor="result">Result</Label>
                                                                     </div>
-                                                                    <div className="grid grid-cols-2 items-center gap-4">
+                                                                    <div
+                                                                        className="grid gap-4 items-center sm:grid-cols-2 md:grid-cols-3">
                                                                         <Image
                                                                             src={tryOnPhoto.photo.photoUrl}
                                                                             width={200}
@@ -167,11 +166,15 @@ export default function MyPage() {
                                                                             alt="Clothing Image"
                                                                             className="rounded-md shadow-md"
                                                                         />
+                                                                        <Image
+                                                                            src={tryOnPhoto.fittingImageUrl}
+                                                                            width={200}
+                                                                            height={200}
+                                                                            alt="Result Image"
+                                                                            className="rounded-md shadow-md"
+                                                                        />
                                                                     </div>
                                                                 </div>
-                                                                {/*<DialogFooter>*/}
-                                                                {/*    <Button type="submit">Save changes</Button>*/}
-                                                                {/*</DialogFooter>*/}
                                                             </DialogContent>
                                                         </Dialog>
                                                     </div>
@@ -187,9 +190,9 @@ export default function MyPage() {
                     </div>
                 </div>
             </main>
-        ) : (
-            <div className="flex flex-col items-center justify-center h-full py-8">
-                <h2 className="text-2xl font-bold mb-4">로그인해야 사용할 수 있습니다</h2>
+            ) : (
+                <div className="flex flex-col items-center justify-center h-full py-8">
+                    <h2 className="text-2xl font-bold mb-4">로그인해야 사용할 수 있습니다</h2>
                 <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => router.push('/login')} // 로그인 페이지로 이동
