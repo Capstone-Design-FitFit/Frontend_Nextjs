@@ -16,7 +16,6 @@
 # production
 /build
 /nginx
-/Dockerfile
 
 # misc
 .DS_Store
