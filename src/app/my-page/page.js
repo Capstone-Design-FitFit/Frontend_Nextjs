@@ -46,28 +46,6 @@ export default function MyPage() {
     const router = useRouter();
     const [tryOnPhotos, setTryOnPhotos] = useState([]);
 
-
-    const loadUserFiles = async () => {
-        if (!user) return;
-
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/${user.userid}`, {
-                method: 'GET',
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                // console.log(data);
-                setPhotos(data.photos); // 사진 데이터를 상태에 저장
-            } else {
-                alert(data);
-            }
-        } catch (error) {
-            alert(error);
-        }
-    };
-
     const loadTryonFiles = async () => {
         if(!user) return;
 
@@ -88,7 +66,7 @@ export default function MyPage() {
         }
     }
     useEffect(() => {
-        loadUserFiles();
+        // loadUserFiles();
         loadTryonFiles();
     }, [user]);
 
@@ -134,46 +112,57 @@ export default function MyPage() {
                                                     <div className="flex flex-col items-center space-y-2">
                                                         <Dialog>
                                                             <DialogTrigger asChild>
-                                                                <Image src={tryOnPhoto.fittingImageUrl} width={200} height={200} alt="" className="rounded-md shadow-md" />
+                                                                <Image src={tryOnPhoto.fittingImageUrl} width={200} height={200} alt="Fitting Image" className="rounded-md shadow-md" />
                                                             </DialogTrigger>
-                                                            <DialogContent className="sm:max-w-[425px]">
+                                                            <DialogContent
+                                                                className="sm:max-w-[350px] md:max-w-[500px] lg:max-w-[800px]">
                                                                 <DialogHeader>
                                                                     <DialogTitle>가상 피팅</DialogTitle>
-                                                                    <DialogDescription>
-                                                                        가상 피팅에 진행된 사진들
-                                                                    </DialogDescription>
+                                                                    <DialogDescription>가상 피팅에 진행된
+                                                                        사진들</DialogDescription>
                                                                 </DialogHeader>
                                                                 <div className="grid gap-4 py-4">
-                                                                    <div className="grid grid-cols-2 items-center gap-4">
-                                                                        <Label htmlFor="name" className="text-center">
-                                                                            You
-                                                                        </Label>
-                                                                        <Label htmlFor="clothes" className="text-center">
-                                                                            Clothes
-                                                                        </Label>
+                                                                    <div
+                                                                        className="grid grid-cols-3 items-center gap-4 text-center">
+                                                                        <Label htmlFor="name">You</Label>
+                                                                        <Label htmlFor="clothes">Clothes</Label>
+                                                                        <Label htmlFor="result">Result</Label>
                                                                     </div>
-                                                                    <div className="grid grid-cols-2 items-center gap-4">
-                                                                        <Image
-                                                                            src={tryOnPhoto.photo.photoUrl}
-                                                                            width={200}
-                                                                            height={200}
-                                                                            alt="User Photo"
-                                                                            className="rounded-md shadow-md"
-                                                                        />
-                                                                        <Image
-                                                                            src={tryOnPhoto.clothing.clothingImageUrl}
-                                                                            width={200}
-                                                                            height={200}
-                                                                            alt="Clothing Image"
-                                                                            className="rounded-md shadow-md"
-                                                                        />
+                                                                    <div
+                                                                        className="grid gap-4 items-center grid-cols-3 sm:grid-cols-3 md:grid-cols-3">
+                                                                        {/* 각 Label과 이미지가 하나의 그룹으로 묶이도록 함 */}
+                                                                        <div className="flex flex-col items-center">
+                                                                            <Image
+                                                                                src={tryOnPhoto.photo.photoUrl}
+                                                                                width={200}
+                                                                                height={200}
+                                                                                alt="User Photo"
+                                                                                className="rounded-md shadow-md w-[80px] sm:w-[120px] md:w-[160px] lg:w-[300px]"
+                                                                            />
+                                                                        </div>
+                                                                        <div className="flex flex-col items-center">
+                                                                            <Image
+                                                                                src={tryOnPhoto.clothing.clothingImageUrl}
+                                                                                width={200}
+                                                                                height={200}
+                                                                                alt="Clothing Image"
+                                                                                className="rounded-md shadow-md w-[80px] sm:w-[120px] md:w-[160px] lg:w-[300px]"
+                                                                            />
+                                                                        </div>
+                                                                        <div className="flex flex-col items-center">
+                                                                            <Image
+                                                                                src={tryOnPhoto.fittingImageUrl}
+                                                                                width={200}
+                                                                                height={200}
+                                                                                alt="Result Image"
+                                                                                className="rounded-md shadow-md w-[80px] sm:w-[120px] md:w-[160px] lg:w-[300px]"
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                {/*<DialogFooter>*/}
-                                                                {/*    <Button type="submit">Save changes</Button>*/}
-                                                                {/*</DialogFooter>*/}
                                                             </DialogContent>
                                                         </Dialog>
+
                                                     </div>
                                                 </CarouselItem>
                                             ))}
@@ -187,17 +176,17 @@ export default function MyPage() {
                     </div>
                 </div>
             </main>
-        ) : (
-            <div className="flex flex-col items-center justify-center h-full py-8">
-                <h2 className="text-2xl font-bold mb-4">로그인해야 사용할 수 있습니다</h2>
-                <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => router.push('/login')} // 로그인 페이지로 이동
-                >
-                    Go Log In!
-                </button>
-            </div>
-        )}
+            ) : (
+                <div className="flex flex-col items-center justify-center h-full py-8">
+                    <h2 className="text-2xl font-bold mb-4">로그인해야 사용할 수 있습니다</h2>
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => router.push('/login')} // 로그인 페이지로 이동
+                    >
+                        Go Log In!
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

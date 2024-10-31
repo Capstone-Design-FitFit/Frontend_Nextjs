@@ -18,21 +18,22 @@ export function UserImageDialog({userImage,clothImage,setCaptured,setStartTryOn}
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="outline">Show Dialog</Button>
+                <Button variant="outline">Show Picture</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="max-w-full w-[90vw] md:max-w-[640px] mx-auto"> {/* 반응형 max-w 설정 */}
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>Check Clothes</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account and remove your data from our servers.
+                        This is your pose and clothes image.
                     </AlertDialogDescription>
-                    <img src={userImage} alt="Virtual Try-On Result" style={{width: '500px'}}/>
-                    <img src={clothImage} alt="Virtual Try-On Result" style={{width: '500px'}}/>
+                    <div className="flex gap-4 justify-center flex-wrap"> {/* 모바일에서 flex-wrap 적용 */}
+                        <img src={userImage} alt="User Image" className="w-full max-w-[300px]" />
+                        <img src={clothImage} alt="Cloth Image" className="w-full max-w-[300px]" />
+                    </div>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel onClick = {() => setCaptured(false)}>Again</AlertDialogCancel>
-                    <AlertDialogAction onClick = {() => setStartTryOn(true)}>Start TryOn!</AlertDialogAction>
+                    <AlertDialogCancel onClick={() => setCaptured(false)}>Again</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => setStartTryOn(true)}>Start TryOn!</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

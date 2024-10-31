@@ -44,7 +44,7 @@ export default function PoseCombobox({value, setValue}) {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-[200px] justify-between m-4"
                 >
                     {value
                         ? frameworks.find((framework) => framework.value === value)?.label

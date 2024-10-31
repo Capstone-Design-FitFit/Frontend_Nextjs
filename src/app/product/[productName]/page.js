@@ -5,13 +5,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 import Image from 'next/image'
 
-// 예제 제품 데이터
-const productData = [
-    { id: 'pants', displayName: 'Stylish Pants', imageUrl: '/images/pants.jpg', price: '$20.00' },
-    { id: 'shirt', displayName: 'Cool Shirt', imageUrl: '/images/shirt.jpg', price: '$15.00' },
-    // 다른 제품 데이터...
-];
-
 const ProductPage = ({ product }) => {
     const router = useRouter();
     const pathname = usePathname();

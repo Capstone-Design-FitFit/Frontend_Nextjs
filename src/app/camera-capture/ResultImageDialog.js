@@ -15,6 +15,9 @@ import { Button } from "@/components/ui/button"
 import React from "react";
 
 export function ResultImageDialog({resultImageURL}) {
+    const handleOnClick = () => {
+        console.log(resultImageURL);
+    }
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -31,7 +34,7 @@ export function ResultImageDialog({resultImageURL}) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     {/*<AlertDialogCancel onClick = {() => setCaptured(false)}>Again</AlertDialogCancel>*/}
-                    <AlertDialogAction>Good!</AlertDialogAction>
+                    <AlertDialogAction onClick={handleOnClick}>Good!</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

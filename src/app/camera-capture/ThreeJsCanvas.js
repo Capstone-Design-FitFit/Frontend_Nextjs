@@ -15,83 +15,154 @@ export default function ThreeJsCanvas({selectPose}) {
         canvas.height = canvas.offsetHeight;
 
         // 사람 실루엣 투명도 설정
-        ctx.globalAlpha = 0.8; // 30% 투명도 설정
+        ctx.globalAlpha = 0.6; // 30% 투명도 설정
         ctx.fillStyle = '#555'; // 회색 실루엣 색상
 
         // 사람 실루엣 그리기 함수
-        const drawSilhouette = () => {
+        // const drawSilhouette = (height) => {
+        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //
+        //     // 머리
+        //     ctx.beginPath();
+        //     ctx.arc(canvas.width / 2, canvas.height / 2 - 150, 40, 0, Math.PI * 2);
+        //     ctx.fill();
+        //
+        //     // 몸통 (위쪽이 둥근 사각형 형태)
+        //     ctx.beginPath();
+        //     ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 - 100);
+        //     ctx.quadraticCurveTo(
+        //         canvas.width / 2, canvas.height / 2 - 140,
+        //         canvas.width / 2 + 40, canvas.height / 2 - 100
+        //     );
+        //     ctx.lineTo(canvas.width / 2 + 30, canvas.height / 2 + 50);
+        //     ctx.lineTo(canvas.width / 2 - 30, canvas.height / 2 + 50);
+        //     ctx.closePath();
+        //     ctx.fill();
+        //
+        //     // 팔 (둥글게 표현된 팔)
+        //     ctx.beginPath();
+        //     ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 - 90);
+        //     ctx.lineTo(canvas.width / 2 - 70, canvas.height / 2 + 20);
+        //     ctx.quadraticCurveTo(
+        //         canvas.width / 2 - 80, canvas.height / 2 + 50,
+        //         canvas.width / 2 - 60, canvas.height / 2 + 50
+        //     );
+        //     ctx.lineTo(canvas.width / 2 - 30, canvas.height / 2 - 10);
+        //     ctx.closePath();
+        //     ctx.fill();
+        //
+        //     ctx.beginPath();
+        //     ctx.moveTo(canvas.width / 2 + 40, canvas.height / 2 - 90);
+        //     ctx.lineTo(canvas.width / 2 + 70, canvas.height / 2 + 20);
+        //     ctx.quadraticCurveTo(
+        //         canvas.width / 2 + 80, canvas.height / 2 + 50,
+        //         canvas.width / 2 + 60, canvas.height / 2 + 50
+        //     );
+        //     ctx.lineTo(canvas.width / 2 + 30, canvas.height / 2 - 10);
+        //     ctx.closePath();
+        //     ctx.fill();
+        //
+        //     // 다리 (둥글게 표현된 다리)
+        //     ctx.beginPath();
+        //     ctx.moveTo(canvas.width / 2 - 20, canvas.height / 2 + 50);
+        //     ctx.lineTo(canvas.width / 2 - 20, canvas.height / 2 + 130);
+        //     ctx.quadraticCurveTo(
+        //         canvas.width / 2 - 20, canvas.height / 2 + 150,
+        //         canvas.width / 2, canvas.height / 2 + 150
+        //     );
+        //     ctx.lineTo(canvas.width / 2, canvas.height / 2 + 50);
+        //     ctx.closePath();
+        //     ctx.fill();
+        //
+        //     ctx.beginPath();
+        //     ctx.moveTo(canvas.width / 2 + 20, canvas.height / 2 + 50);
+        //     ctx.lineTo(canvas.width / 2 + 20, canvas.height / 2 + 130);
+        //     ctx.quadraticCurveTo(
+        //         canvas.width / 2 + 20, canvas.height / 2 + 150,
+        //         canvas.width / 2, canvas.height / 2 + 150
+        //     );
+        //     ctx.lineTo(canvas.width / 2, canvas.height / 2 + 50);
+        //     ctx.closePath();
+        //     ctx.fill();
+        // };
+
+        const drawSilhouette = (size, height) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // 머리
             ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2 - 150, 40, 0, Math.PI * 2);
+            ctx.arc(canvas.width / 2, height - (150 * size), 40 * size, 0, Math.PI * 2);
             ctx.fill();
 
             // 몸통 (위쪽이 둥근 사각형 형태)
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 - 100);
+            ctx.moveTo(canvas.width / 2 - (40 * size), height - (100 * size));
             ctx.quadraticCurveTo(
-                canvas.width / 2, canvas.height / 2 - 140,
-                canvas.width / 2 + 40, canvas.height / 2 - 100
+                canvas.width / 2, height - (140 * size),
+                canvas.width / 2 + (40 * size), height - (100 * size)
             );
-            ctx.lineTo(canvas.width / 2 + 30, canvas.height / 2 + 50);
-            ctx.lineTo(canvas.width / 2 - 30, canvas.height / 2 + 50);
+            ctx.lineTo(canvas.width / 2 + (30 * size), height + (50 * size));
+            ctx.lineTo(canvas.width / 2 - (30 * size), height + (50 * size));
             ctx.closePath();
             ctx.fill();
 
-            // 팔 (둥글게 표현된 팔)
+            // 왼쪽 팔
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 - 90);
-            ctx.lineTo(canvas.width / 2 - 70, canvas.height / 2 + 20);
+            ctx.moveTo(canvas.width / 2 - (40 * size), height - (90 * size));
+            ctx.lineTo(canvas.width / 2 - (70 * size), height + (20 * size));
             ctx.quadraticCurveTo(
-                canvas.width / 2 - 80, canvas.height / 2 + 50,
-                canvas.width / 2 - 60, canvas.height / 2 + 50
+                canvas.width / 2 - (80 * size), height + (50 * size),
+                canvas.width / 2 - (60 * size), height + (50 * size)
             );
-            ctx.lineTo(canvas.width / 2 - 30, canvas.height / 2 - 10);
+            ctx.lineTo(canvas.width / 2 - (30 * size), height - (10 * size));
             ctx.closePath();
             ctx.fill();
 
+            // 오른쪽 팔
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 + 40, canvas.height / 2 - 90);
-            ctx.lineTo(canvas.width / 2 + 70, canvas.height / 2 + 20);
+            ctx.moveTo(canvas.width / 2 + (40 * size), height - (90 * size));
+            ctx.lineTo(canvas.width / 2 + (70 * size), height + (20 * size));
             ctx.quadraticCurveTo(
-                canvas.width / 2 + 80, canvas.height / 2 + 50,
-                canvas.width / 2 + 60, canvas.height / 2 + 50
+                canvas.width / 2 + (80 * size), height + (50 * size),
+                canvas.width / 2 + (60 * size), height + (50 * size)
             );
-            ctx.lineTo(canvas.width / 2 + 30, canvas.height / 2 - 10);
+            ctx.lineTo(canvas.width / 2 + (30 * size), height - (10 * size));
             ctx.closePath();
             ctx.fill();
 
-            // 다리 (둥글게 표현된 다리)
+            // 왼쪽 다리
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - 20, canvas.height / 2 + 50);
-            ctx.lineTo(canvas.width / 2 - 20, canvas.height / 2 + 130);
+            ctx.moveTo(canvas.width / 2 - (20 * size), height + (50 * size));
+            ctx.lineTo(canvas.width / 2 - (20 * size), height + (130 * size));
             ctx.quadraticCurveTo(
-                canvas.width / 2 - 20, canvas.height / 2 + 150,
-                canvas.width / 2, canvas.height / 2 + 150
+                canvas.width / 2 - (20 * size), height + (150 * size),
+                canvas.width / 2, height + (150 * size)
             );
-            ctx.lineTo(canvas.width / 2, canvas.height / 2 + 50);
+            ctx.lineTo(canvas.width / 2, height + (50 * size));
             ctx.closePath();
             ctx.fill();
 
+            // 오른쪽 다리
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 + 20, canvas.height / 2 + 50);
-            ctx.lineTo(canvas.width / 2 + 20, canvas.height / 2 + 130);
+            ctx.moveTo(canvas.width / 2 + (20 * size), height + (50 * size));
+            ctx.lineTo(canvas.width / 2 + (20 * size), height + (130 * size));
             ctx.quadraticCurveTo(
-                canvas.width / 2 + 20, canvas.height / 2 + 150,
-                canvas.width / 2, canvas.height / 2 + 150
+                canvas.width / 2 + (20 * size), height + (150 * size),
+                canvas.width / 2, height + (150 * size)
             );
-            ctx.lineTo(canvas.width / 2, canvas.height / 2 + 50);
+            ctx.lineTo(canvas.width / 2, height + (50 * size));
             ctx.closePath();
             ctx.fill();
         };
 
-        drawSilhouette();
+        drawSilhouette(1.2,370);
+        // height 커질 수록 내려간다
 
         // 화면 크기 변경에 따라 다시 그리기
-        window.addEventListener('resize', drawSilhouette);
+        // window.addEventListener('resize', drawSilhouette);
         return () => window.removeEventListener('resize', drawSilhouette);
     }, []);
+
     // useEffect(() => {
     //     // THREE.js setup
     //     const scene = new Scene();

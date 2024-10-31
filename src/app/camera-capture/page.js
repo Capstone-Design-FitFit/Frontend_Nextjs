@@ -1,12 +1,13 @@
+// app/camera-capture/page.js
 import dynamic from 'next/dynamic';
+import {Skeleton} from "@/components/ui/skeleton";
 
-// 서버사이드 렌더링을 비활성화한 상태로 WebcamCapture 컴포넌트 동적 로드
-const WebcamCapture = dynamic(() => import('@/app/camera-capture/WebcamCapture'), {
+// CameraCapturePage 자체를 동적 로드
+const CapturePage = dynamic(() => import('@/app/camera-capture/CapturePage'), {
     ssr: false,
+    loading: () => <Skeleton />
 });
 
-export default function CameraCapturePage() {
-    return (
-        <WebcamCapture />
-    );
+export default function Page() {
+    return <CapturePage />;
 }
