@@ -53,5 +53,4 @@ jobs:
             # 모든 컨테이너 및 이미지 삭제 후 새로운 컨테이너 실행
             docker rm -f $(docker ps -a -q) || true  # 모든 컨테이너 강제 삭제
             docker rmi -f $(docker images -q) || true  # 모든 이미지 강제 삭제
-            docker pull ${{ secrets.DOCKER_USERNAME }}/react:v1
-            docker run -d -p 80:3000 --name react-container ${{ secrets.DOCKER_USERNAME }}/react:v1
+            docker run -dp 80:3000 ${{ secrets.DOCKER_USERNAME }}/react:v1
