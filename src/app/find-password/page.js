@@ -16,7 +16,7 @@ export const description =
 
 export default function FindPassword() {
     return (
-        <Card className="mx-auto max-w-sm">
+        <Card className="mx-auto max-w-sm mb-4">
             <CardHeader>
                 <CardTitle className="text-2xl">Find Password</CardTitle>
                 <CardDescription>

@@ -11,24 +11,55 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const description =
     "A sign up form with first name, last name, email and password inside a card. There's an option to sign up with GitHub and a link to login if you already have an account";
 
 export default function SignUpForm() {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [userName,setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Form submission logic goes here
-        console.log("Form submitted with:", { firstName, lastName, email, password });
-    };
+    const signUp = async () => {
+        const bodyData = {
+            username: userName,
+            password: password,
+            email: email,
+        };
+
+        if (userName.length === 0 || email.length === 0 || password.length === 0) {
+            alert("Enter All Information!")
+            return
+        }
+
+        console.log(bodyData);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_API_URL}/register`, {
+                method: 'POST',
+                headers : {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bodyData),
+            });
+
+            const data = await response.text();
+
+            if (response.ok) {
+                alert("회원가입 완료");
+                router.push("/login");
+            } else {
+                alert(data);
+            }
+        } catch (error) {
+            alert(error);
+        }
+    }
 
     return (
-        <Card className="mx-auto max-w-sm">
+        <Card className="mx-auto max-w-sm mb-4">
             <CardHeader>
                 <CardTitle className="text-xl">Sign Up</CardTitle>
                 <CardDescription>
@@ -36,26 +67,16 @@ export default function SignUpForm() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
+                <form className="grid gap-4">
+                    <div className="gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="first-name">First name</Label>
+                            <Label htmlFor="first-name">User Name</Label>
                             <Input
-                                id="first-name"
-                                placeholder="Max"
+                                id="username"
+                                placeholder="Jinsoo"
                                 required
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="last-name">Last name</Label>
-                            <Input
-                                id="last-name"
-                                placeholder="Robinson"
-                                required
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
                             />
                         </div>
                     </div>
@@ -80,11 +101,8 @@ export default function SignUpForm() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <Button type="submit" className="w-full">
+                    <Button type="button" className="w-full" onClick={signUp}>
                         Create an account
-                    </Button>
-                    <Button variant="outline" className="w-full" onClick={() => {/* GitHub Sign-Up Logic */}}>
-                        Sign up with GitHub
                     </Button>
                 </form>
                 <div className="mt-4 text-center text-sm">
