@@ -11,7 +11,6 @@ const ProductBox = ({ product }) => {
                     <Image alt={product.displayName} loading="lazy" decoding="async" data-nimg="fill"
                          className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
                          sizes="(min-width: 1024px) 25vw, (min-width: 768p  x) 33vw, 50vw"
-                         layout="responsive"
                          width={100}
                            height={100}
                          src={product.imageUrl}
