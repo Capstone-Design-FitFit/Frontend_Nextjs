@@ -16,6 +16,7 @@ import {ResultImageDialog} from "@/app/camera-capture/ResultImageDialog";
 
 export default function ChoosePose (){
     const [poseImageList, setPoseImageList] = useState([]);
+    const [poseImageKeys, setPoseImageKeys] = useState([]);
     const [resultImageURL, setResultImageURL] = useState("");
     const [startTryOn, setStartTryOn] = useState(false);
     const [tryOnComplete, setTryOnComplete] = useState(false);
@@ -26,7 +27,7 @@ export default function ChoosePose (){
     const [current, setCurrent] = React.useState(0)
     const [count, setCount] = React.useState(0)
     const selectedImage = poseImageList.find(image =>
-        image.photoId === current
+        image.photoId === poseImageKeys[current-1]
     );
     let resultJSON;
 
@@ -36,6 +37,11 @@ export default function ChoosePose (){
         };
         runLoadImage();
     }, []);
+
+    useEffect(() => {
+        const imageKeys = poseImageList.map(image => image.photoId);
+        setPoseImageKeys(imageKeys);
+    },[poseImageList])
 
     useEffect(() => {
         if (!api) {
@@ -88,6 +94,7 @@ export default function ChoosePose (){
 
     const testing = async () => {
         setStartTryOn(true);
+        console.log(selectedImage);
         const photoUrl = selectedImage.photoUrl
         console.log(photoUrl);
         const match = photoUrl.match(/(\d{4}\d+)_pose_capture/);
@@ -106,7 +113,7 @@ export default function ChoosePose (){
     const handleStartTryOn = async () => {
         setStartTryOn(true);
         try {
-            const photoUrl = selectedImage.photoUrl
+            const photoUrl = selectedImage.photoUrl;
             const res = await fetch(photoUrl);
             const userBlob = await res.blob();
             console.log(userBlob);
@@ -195,7 +202,7 @@ export default function ChoosePose (){
                     <div className="py-2 text-center text-sm text-muted-foreground">
                         Image {current} of {count}
                     </div>
-                    <Button onClick={testing}>Start TryOn!</Button>
+                    <Button onClick={handleStartTryOn}>Start TryOn!</Button>
                 </>
             )}
         </>
