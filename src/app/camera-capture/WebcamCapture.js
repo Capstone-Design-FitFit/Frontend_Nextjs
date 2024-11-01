@@ -66,7 +66,7 @@ const WebcamCapture = () => {
         const setupCamera = async () => {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 700 } },
+                    video: { facingMode: 'environment', width: { ideal: 540 }, height: { ideal: 700 } },
                 });
                 if (webcamRef.current) {
                     webcamRef.current.srcObject = stream;
@@ -300,7 +300,7 @@ const WebcamCapture = () => {
                         autoPlay
                         playsInline
                         muted
-                        width="640"
+                        width="540"
                         height="700"
                     />
                     <canvas
