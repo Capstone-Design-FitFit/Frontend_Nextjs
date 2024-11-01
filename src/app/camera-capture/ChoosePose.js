@@ -105,14 +105,14 @@ export default function ChoosePose (){
 
     const handleStartTryOn = async () => {
         setStartTryOn(true);
-        const photoUrl = selectedImage.photoUrl
-        const res = await fetch(photoUrl);
-        const userBlob = await res.blob();
-        console.log(userBlob);
-        const formData = new FormData();
-        const match = photoUrl.match(/(\d{4}\d+)_pose_capture/);
-
         try {
+            const photoUrl = selectedImage.photoUrl
+            const res = await fetch(photoUrl);
+            const userBlob = await res.blob();
+            console.log(userBlob);
+            const formData = new FormData();
+            const match = photoUrl.match(/(\d{4}\d+)_pose_capture/);
+
             // 옷 이미지 가져오기
             const response = await fetch(clothImage, {
                 method: 'GET',
