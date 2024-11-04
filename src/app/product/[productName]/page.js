@@ -42,7 +42,7 @@ const ProductPage = ({ product }) => {
                 <div className="basis-full lg:basis-2/6">
                     <div className="mb-6 flex flex-col border-b pb-6 dark:border-neutral-700">
                         <h1 className="mb-2 mt-4 text-5xl font-medium">
-                            Lightweight Jacket
+                            T-Shirts
                         </h1>
                         <div className="mt-4 mr-auto w-auto rounded-full bg-blue-600 p-2 text-sm text-white">
                             <p>
@@ -93,10 +93,10 @@ const ProductPage = ({ product }) => {
                             <div className="absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label">
                                 <div className="flex items-center rounded-full border bg-white/70 p-1 text-xs font-semibold text-black backdrop-blur-md dark:border-neutral-800 dark:bg-black/70 dark:text-white">
                                     <h3 className="mr-4 line-clamp-2 flex-grow pl-2 leading-none tracking-tight">
-                                        Purple Insulated Jacket
+                                        T-Shirts
                                     </h3>
                                     <p className="flex-none rounded-full bg-blue-600 p-2 text-white">
-                                        $500.00
+                                        35,000
                                     </p>
                                 </div>
                             </div>
