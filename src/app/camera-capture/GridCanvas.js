@@ -4,7 +4,7 @@ import { Scene, PerspectiveCamera, WebGLRenderer, MeshBasicMaterial, SphereGeome
 import React, {useEffect, useRef} from "react";
 import {armsDownPose, leftArmUpPose, rightArmUpPose} from "@/app/camera-capture/PosesData";
 
-export default function ThreeJsCanvas({selectPose}) {
+export default function GridCanvas({selectPose, selectSize}) {
     const threeCanvasRef = useRef(null);
     const poseCanvasRef = useRef(null);
 
@@ -17,74 +17,6 @@ export default function ThreeJsCanvas({selectPose}) {
         // 사람 실루엣 투명도 설정
         ctx.globalAlpha = 0.6; // 30% 투명도 설정
         ctx.fillStyle = '#555'; // 회색 실루엣 색상
-
-        // 사람 실루엣 그리기 함수
-        // const drawSilhouette = (height) => {
-        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //
-        //     // 머리
-        //     ctx.beginPath();
-        //     ctx.arc(canvas.width / 2, canvas.height / 2 - 150, 40, 0, Math.PI * 2);
-        //     ctx.fill();
-        //
-        //     // 몸통 (위쪽이 둥근 사각형 형태)
-        //     ctx.beginPath();
-        //     ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 - 100);
-        //     ctx.quadraticCurveTo(
-        //         canvas.width / 2, canvas.height / 2 - 140,
-        //         canvas.width / 2 + 40, canvas.height / 2 - 100
-        //     );
-        //     ctx.lineTo(canvas.width / 2 + 30, canvas.height / 2 + 50);
-        //     ctx.lineTo(canvas.width / 2 - 30, canvas.height / 2 + 50);
-        //     ctx.closePath();
-        //     ctx.fill();
-        //
-        //     // 팔 (둥글게 표현된 팔)
-        //     ctx.beginPath();
-        //     ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 - 90);
-        //     ctx.lineTo(canvas.width / 2 - 70, canvas.height / 2 + 20);
-        //     ctx.quadraticCurveTo(
-        //         canvas.width / 2 - 80, canvas.height / 2 + 50,
-        //         canvas.width / 2 - 60, canvas.height / 2 + 50
-        //     );
-        //     ctx.lineTo(canvas.width / 2 - 30, canvas.height / 2 - 10);
-        //     ctx.closePath();
-        //     ctx.fill();
-        //
-        //     ctx.beginPath();
-        //     ctx.moveTo(canvas.width / 2 + 40, canvas.height / 2 - 90);
-        //     ctx.lineTo(canvas.width / 2 + 70, canvas.height / 2 + 20);
-        //     ctx.quadraticCurveTo(
-        //         canvas.width / 2 + 80, canvas.height / 2 + 50,
-        //         canvas.width / 2 + 60, canvas.height / 2 + 50
-        //     );
-        //     ctx.lineTo(canvas.width / 2 + 30, canvas.height / 2 - 10);
-        //     ctx.closePath();
-        //     ctx.fill();
-        //
-        //     // 다리 (둥글게 표현된 다리)
-        //     ctx.beginPath();
-        //     ctx.moveTo(canvas.width / 2 - 20, canvas.height / 2 + 50);
-        //     ctx.lineTo(canvas.width / 2 - 20, canvas.height / 2 + 130);
-        //     ctx.quadraticCurveTo(
-        //         canvas.width / 2 - 20, canvas.height / 2 + 150,
-        //         canvas.width / 2, canvas.height / 2 + 150
-        //     );
-        //     ctx.lineTo(canvas.width / 2, canvas.height / 2 + 50);
-        //     ctx.closePath();
-        //     ctx.fill();
-        //
-        //     ctx.beginPath();
-        //     ctx.moveTo(canvas.width / 2 + 20, canvas.height / 2 + 50);
-        //     ctx.lineTo(canvas.width / 2 + 20, canvas.height / 2 + 130);
-        //     ctx.quadraticCurveTo(
-        //         canvas.width / 2 + 20, canvas.height / 2 + 150,
-        //         canvas.width / 2, canvas.height / 2 + 150
-        //     );
-        //     ctx.lineTo(canvas.width / 2, canvas.height / 2 + 50);
-        //     ctx.closePath();
-        //     ctx.fill();
-        // };
 
         const drawSilhouette = (size, height) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -155,13 +87,29 @@ export default function ThreeJsCanvas({selectPose}) {
             ctx.fill();
         };
 
-        drawSilhouette(1.2,370);
         // height 커질 수록 내려간다
+        const handleResize = () => {
+            if (selectSize === "very-small") {
+                drawSilhouette(0.8, 330);
+            } else if (selectSize === "small") {
+                drawSilhouette(1.0, 340);
+            } else if (selectSize === "medium") {
+                drawSilhouette(1.1, 360);
+            } else if (selectSize === "large") {
+                drawSilhouette(1.15, 370);
+            } else if (selectSize === "very-large") {
+                drawSilhouette(1.3, 380);
+            } else {
+                drawSilhouette(1.2, 370); // 기본값
+            }
+        };
 
-        // 화면 크기 변경에 따라 다시 그리기
-        // window.addEventListener('resize', drawSilhouette);
+        console.log(selectSize);
+
+        handleResize(); // 초기 호출
+
         return () => window.removeEventListener('resize', drawSilhouette);
-    }, []);
+    }, [selectSize]);
 
     // useEffect(() => {
     //     // THREE.js setup

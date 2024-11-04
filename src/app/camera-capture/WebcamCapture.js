@@ -9,11 +9,12 @@ import PoseCombobox from './PoseCombobox'
 import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/app/camera-capture/PosesData";
 import { useSearchParams } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
-import ThreeJsCanvas from "@/app/camera-capture/ThreeJsCanvas";
+import GridCanvas from "@/app/camera-capture/GridCanvas";
 import ScoreCanvas from "@/app/camera-capture/ScoreCanvas";
 import {UserImageDialog} from "@/app/camera-capture/UserImageDialog";
 import {ResultImageDialog} from "@/app/camera-capture/ResultImageDialog";
 import {LoadingAlert} from "@/app/camera-capture/LoadingAlert";
+import SizeSelect from "@/app/camera-capture/SizeSelect";
 
 const WebcamCapture = () => {
     const webcamRef = useRef(null);
@@ -21,13 +22,14 @@ const WebcamCapture = () => {
     const [detector, setDetector] = useState(null);
     const [captured, setCaptured] = useState(false);
     const [userImage, setUserImage] = useState(null);
-    const [selectPose, setSelectPose] = useState("");
+    const [selectPose, setSelectPose] = useState('');
+    const [selectSize, setSelectSize] = useState('medium');
     const [wholeBodyScore, setWholeBodyScore] = useState(0);
     const [leftBodyScore, setLeftBodyScore] = useState(0);
     const [rightBodyScore, setRightBodyScore] = useState(0);
     const [startTryOn, setStartTryOn] = useState(false);
     const [tryOnComplete, setTryOnComplete] = useState(false);
-    const [resultImageURL, setResultImageURL] = useState("");
+    const [resultImageURL, setResultImageURL] = useState('');
     const searchParams = useSearchParams();
     const clothId = searchParams.get('clothId');
     const clothImage = `/images/${clothId}.jpg`;
@@ -276,7 +278,8 @@ const WebcamCapture = () => {
 
     return (
         <div align={'center'}>
-            <PoseCombobox value={selectPose} setValue={setSelectPose}/>
+            {/*<PoseCombobox value={selectPose} setValue={setSelectPose}/>*/}
+            <SizeSelect setValue={setSelectSize}/>
             <ScoreCanvas wholeBodyScore={wholeBodyScore} leftBodyScore={leftBodyScore} rightBodyScore={rightBodyScore} />
             {userImage && captured &&
                 <UserImageDialog
@@ -307,7 +310,7 @@ const WebcamCapture = () => {
                         ref={canvasRef}
                         className="absolute top-0 left-0 w-full h-full z-10"
                     />
-                    <ThreeJsCanvas selectPose={selectPose}/>
+                    <GridCanvas selectPose={selectPose} selectSize={selectSize}/>
                 </div>
             </div>
         </div>

@@ -25,10 +25,9 @@ export function ResultImageDialog({resultImageURL}) {
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>This is your pose and clothes image</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account and remove your data from our servers.
+                        Virtual TryOn takes about 25 seconds. We will notify you after it is ended.
                     </AlertDialogDescription>
                     <img src={resultImageURL} alt="Virtual Try-On Result" style={{width: '500px'}}/>
                 </AlertDialogHeader>

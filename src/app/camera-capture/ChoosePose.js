@@ -202,7 +202,7 @@ export default function ChoosePose (){
                     <div className="py-2 text-center text-sm text-muted-foreground">
                         Image {current} of {count}
                     </div>
-                    <Button onClick={handleStartTryOn}>Start TryOn!</Button>
+                    <Button onClick={handleStartTryOn} className="mx-auto">Start TryOn!</Button>
                 </>
             )}
         </>

@@ -18,7 +18,7 @@ export function UserImageDialog({userImage,clothImage,setCaptured,setStartTryOn}
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="outline">Show Picture</Button>
+                <Button className="mb-3" variant="outline">Show Picture</Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="max-w-full w-[90vw] md:max-w-[640px] mx-auto"> {/* 반응형 max-w 설정 */}
                 <AlertDialogHeader>
