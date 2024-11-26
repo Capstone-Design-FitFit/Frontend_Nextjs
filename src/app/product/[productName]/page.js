@@ -62,7 +62,7 @@ const ProductPage = ({ product }) => {
                     </div>
                     <Link
                         href = {{
-                            pathname: '/camera-capture',
+                            pathname: '/virtual-tryon',
                             query: { clothId : productName},
                         }}
                         className="relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:bg-blue-500">

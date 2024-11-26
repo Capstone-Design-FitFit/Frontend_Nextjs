@@ -11,10 +11,10 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import { useSearchParams } from 'next/navigation'
-import {LoadingAlert} from "@/app/camera-capture/LoadingAlert";
-import {ResultImageDialog} from "@/app/camera-capture/ResultImageDialog";
+import {LoadingAlert} from "@/components/virtual-tryon/LoadingAlert";
+import {ResultImageDialog} from "@/components/virtual-tryon/ResultImageDialog";
 
-export default function ChoosePose (){
+export default function ChoosePosePage (){
     const [poseImageList, setPoseImageList] = useState([]);
     const [poseImageKeys, setPoseImageKeys] = useState([]);
     const [resultImageURL, setResultImageURL] = useState("");

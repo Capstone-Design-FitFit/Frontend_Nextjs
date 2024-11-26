@@ -4,19 +4,19 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import '@tensorflow/tfjs-backend-webgl';
-import { vectorizeAndNormalize, cosineDistanceMatching, convertStructure } from './CosineSimilarity';
-import PoseCombobox from './PoseCombobox'
-import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/app/camera-capture/PosesData";
+import { vectorizeAndNormalize, cosineDistanceMatching, convertStructure } from '@/components/virtual-tryon/CosineSimilarity';
+import PoseCombobox from '@/components/virtual-tryon/PoseCombobox'
+import { armsDownPose, leftArmUpPose, rightArmUpPose } from "@/components/virtual-tryon/PosesData";
 import { useSearchParams } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
-import GridCanvas from "@/app/camera-capture/GridCanvas";
-import ScoreCanvas from "@/app/camera-capture/ScoreCanvas";
-import {UserImageDialog} from "@/app/camera-capture/UserImageDialog";
-import {ResultImageDialog} from "@/app/camera-capture/ResultImageDialog";
-import {LoadingAlert} from "@/app/camera-capture/LoadingAlert";
-import SizeSelect from "@/app/camera-capture/SizeSelect";
+import GridCanvas from "@/components/virtual-tryon/GridCanvas";
+import ScoreCanvas from "@/components/virtual-tryon/ScoreCanvas";
+import {UserImageDialog} from "@/components/virtual-tryon/UserImageDialog";
+import {ResultImageDialog} from "@/components/virtual-tryon/ResultImageDialog";
+import {LoadingAlert} from "@/components/virtual-tryon/LoadingAlert";
+import SizeSelect from "@/components/virtual-tryon/SizeSelect";
 
-const WebcamCapture = () => {
+const ShootPosePage = () => {
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
     const [detector, setDetector] = useState(null);
@@ -30,6 +30,7 @@ const WebcamCapture = () => {
     const [startTryOn, setStartTryOn] = useState(false);
     const [tryOnComplete, setTryOnComplete] = useState(false);
     const [resultImageURL, setResultImageURL] = useState('');
+    const [userImageDialogOpen, setUserImageDialogOpen] = useState(false);
     const searchParams = useSearchParams();
     const clothId = searchParams.get('clothId');
     const clothImage = `/images/${clothId}.jpg`;
@@ -187,6 +188,7 @@ const WebcamCapture = () => {
             // toDataURL로 이미지 데이터 URL을 얻기
             const vtonImage = canvas.toDataURL('image/png');
             setUserImage(vtonImage);
+            setUserImageDialogOpen(true);
         }
     },[captured]);
 
@@ -287,6 +289,8 @@ const WebcamCapture = () => {
                     clothImage={clothImage}
                     setCaptured={setCaptured}
                     setStartTryOn={setStartTryOn}
+                    userImageDialogOpen={userImageDialogOpen}
+                    setUserImageDialogOpen={setUserImageDialogOpen}
                 />
             }
             {tryOnComplete &&
@@ -317,4 +321,4 @@ const WebcamCapture = () => {
     );
 };
 
-export default WebcamCapture;
+export default ShootPosePage;

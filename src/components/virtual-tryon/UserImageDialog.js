@@ -14,12 +14,9 @@ import {
 import { Button } from "@/components/ui/button"
 import React from "react";
 
-export function UserImageDialog({userImage,clothImage,setCaptured,setStartTryOn}) {
+export function UserImageDialog({userImage,clothImage,setCaptured,setStartTryOn,userImageDialogOpen,setUserImageDialogOpen}) {
     return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <Button className="mb-3" variant="outline">Show Picture</Button>
-            </AlertDialogTrigger>
+        <AlertDialog open={userImageDialogOpen} onOpenChange={setUserImageDialogOpen}>
             <AlertDialogContent className="max-w-full w-[90vw] md:max-w-[640px] mx-auto"> {/* 반응형 max-w 설정 */}
                 <AlertDialogHeader>
                     <AlertDialogTitle>Check Clothes</AlertDialogTitle>

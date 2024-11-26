@@ -31,7 +31,7 @@ export default function Header() {
                             <a
                                 className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300 m-6"
                                 href="/my-page">
-                                MyPage
+                                My Page
                             </a>
                         </li>
                     </ul>

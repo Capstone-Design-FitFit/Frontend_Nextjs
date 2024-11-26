@@ -11,10 +11,10 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import ChoosePose from "@/app/camera-capture/ChoosePose";
-import WebcamCapture from "@/app/camera-capture/WebcamCapture";
+import ChoosePosePage from "@/app/virtual-tryon/ChoosePosePage";
+import ShootPosePage from "@/app/virtual-tryon/ShootPosePage";
 
-export default function CapturePage() {
+export default function VirtualTryOn() {
     return (
         <Tabs defaultValue="webcam" className="w-full flex flex-col justify-center items-center">
             <TabsList className="grid w-1/2 grid-cols-2">
@@ -30,7 +30,7 @@ export default function CapturePage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <WebcamCapture />
+                        <ShootPosePage />
                     </CardContent>
                 </Card>
             </TabsContent>
@@ -43,7 +43,7 @@ export default function CapturePage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2 justify-items-center">
-                        <ChoosePose/>
+                        <ChoosePosePage/>
                     </CardContent>
                 </Card>
             </TabsContent>
