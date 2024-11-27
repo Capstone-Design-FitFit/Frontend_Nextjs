@@ -11,7 +11,7 @@ export default function Home() {
                 <div className="md:col-span-4 md:row-span-2">
                     <a className="relative block aspect-square h-full w-full" href={`/product/${clothes.one.name}`}>
                     <div
-                        className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
+                        className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-[#EAEAEA] hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
                         <img alt="Lightweight Jacket"
                              className="relative h-full w-full transition duration-300 ease-in-out scale-75 group-hover:scale-90"
                              sizes="(min-width: 768px) 66vw, 100vw"
@@ -42,7 +42,7 @@ export default function Home() {
                 <div className="md:col-span-2 md:row-span-1">
                     <a className="relative block aspect-square h-full w-full" href={`/product/${clothes.two.name}`}>
                     <div
-                        className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
+                        className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-[#EAEAEA] hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
                         <img alt="Next.js Joggers" fetchPriority="high" decoding="async" data-nimg="fill"
                              className="relative h-full w-full transition duration-300 ease-in-out scale-75 group-hover:scale-90"
                              sizes="(min-width: 768px) 33vw, 100vw"
@@ -72,7 +72,7 @@ export default function Home() {
                 <div className="md:col-span-2 md:row-span-1">
                     <a className="relative block aspect-square h-full w-full" href={`/product/${clothes.three.name}`}>
                     <div
-                        className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
+                        className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-[#EAEAEA] hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
                         <img alt="Purple Insulated Jacket" loading="lazy" decoding="async" data-nimg="fill"
                              className="relative h-full w-full transition duration-300 ease-in-out scale-75 group-hover:scale-90"
                              sizes="(min-width: 768px) 33vw, 100vw"

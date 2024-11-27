@@ -7,7 +7,7 @@ const ProductBox = ({ product }) => {
         <li key = {product.name} className="relative aspect-square h-[30vh] max-h-[275px] w-2/3 max-w-[475px] flex-none md:w-1/3">
             <Link className="relative h-full w-full" href={`/product/${product.name}`}>
                 <div
-                    className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
+                    className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-[#EAEAEA] hover:border-blue-600 dark:bg-black relative border-neutral-200 dark:border-neutral-800">
                     <Image alt={product.displayName} loading="lazy" decoding="async" data-nimg="fill"
                          className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
                          sizes="(min-width: 1024px) 25vw, (min-width: 768p  x) 33vw, 50vw"
