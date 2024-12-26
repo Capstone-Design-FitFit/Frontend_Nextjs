@@ -42,13 +42,13 @@ jobs:
         run: |
           docker push "${{ secrets.DOCKER_USERNAME }}/react:v1"
 
-      # 5. EC2 서버로 배포 (SSH 연결)
-      - name: Deploy to EC2
+      # 5. GCP VM 서버로 배포 (SSH 연결)
+      - name: Deploy to GCP VM
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user  # EC2 사용자 이름
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.GCP_VM_IP }}
+          username: ${{ secrets.GCP_VM_USER }}
+          key: ${{ secrets.GCP_VM_SSH_KEY }}
           script: |
             # 모든 컨테이너 및 이미지 삭제 후 새로운 컨테이너 실행
             docker rm -f $(docker ps -a -q) || true  # 모든 컨테이너 강제 삭제
